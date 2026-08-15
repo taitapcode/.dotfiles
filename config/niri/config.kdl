@@ -145,6 +145,7 @@ binds {
   Mod+D { spawn "noctalia" "msg" "panel-toggle" "launcher"; }
   Mod+S { spawn "noctalia" "msg" "panel-toggle" "control-center"; }
   Mod+P { spawn "noctalia" "msg" "panel-toggle" "session"; }
+  Mod+V { spawn "noctalia" "msg" "panel-toggle" "clipboard"; }
   Mod+Comma { spawn "noctalia" "msg" "settings-toggle"; }
 
   // Audio & Media control via Noctalia
@@ -275,8 +276,8 @@ binds {
   Mod+Shift+Minus { set-window-height "-10%"; }
   Mod+Shift+Equal { set-window-height "+10%"; }
 
-  Mod+V       { toggle-window-floating; }
-  Mod+Shift+V { switch-focus-between-floating-and-tiling; }
+  Mod+X       { toggle-window-floating; }
+  Mod+Shift+X { switch-focus-between-floating-and-tiling; }
 
   Mod+W { toggle-column-tabbed-display; }
 
