@@ -25,6 +25,8 @@ in
 
         backdrop.enabled = true;
 
+        battery.warning_threshold = 20;
+
         bar = {
           order = [ "top" ];
           top = {
@@ -54,6 +56,9 @@ in
         control_center = {
           sidebar = "compact";
           sidebar_section = "none";
+          calendar = {
+            show_events_card = false;
+          };
         };
 
         desktop_widgets.enabled = false;
@@ -87,7 +92,11 @@ in
         };
 
         location.address = "Ho Chi Minh City, Vietnam";
-        notification.position = "top_center";
+
+        notification = {
+          history_retention_hours = 3;
+          position = "top_center";
+        };
 
         plugins.enabled = [ ];
 
