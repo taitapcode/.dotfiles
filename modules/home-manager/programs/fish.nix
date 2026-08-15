@@ -12,6 +12,7 @@ in
     ./fzf.nix
     ./zoxide.nix
     ./yazi.nix
+    ./nix-index.nix
   ];
 
   options.modules.home.programs.fish.enable = lib.mkEnableOption "Enable Fish shell configuration";
@@ -21,6 +22,7 @@ in
       fzf.enable = true;
       zoxide.enable = true;
       yazi.enable = true;
+      nix-index.enable = true;
     };
 
     home.packages = with pkgs; [
@@ -69,6 +71,10 @@ in
         };
         fish_mode_prompt = {
           body = "";
+        };
+
+        fish_command_not_found = {
+          body = ", \$argv";
         };
 
         _git_branch_name = {
