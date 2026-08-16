@@ -5,8 +5,9 @@ MAP('x', '<leader>p', [["_dP]], { desc = 'Paste (Black hole)' })
 MAP('n', 'x', [["_x]])
 MAP('n', 'X', [["_X]])
 
--- Selection & Search
-MAP('n', '<leader>ha', 'ggVG', { desc = 'Select all' })
+-- Yank/Delete all
+MAP('n', '<leader>hy', '<cmd>%y<cr>', { desc = 'Yank all' })
+MAP('n', '<leader>hd', '<cmd>%d<cr>', { desc = 'Delete all' })
 
 -- Restart nvim
 MAP('n', '<M-R>', '<cmd>restart<CR>', { desc = 'Restart neovim' })
