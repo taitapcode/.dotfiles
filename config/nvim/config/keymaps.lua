@@ -50,16 +50,10 @@ MAP('n', '<C-Up>', '"<Cmd>resize +"          . v:count1 . "<CR>"', { expr = true
 MAP('n', '<C-Right>', '"<Cmd>vertical resize +" . v:count1 . "<CR>"', { expr = true, desc = 'Increase window width' })
 
 -- Meta/Alt navigational binds across modes
-MAP('c', '<M-h>', '<Left>', { silent = false, desc = 'Left' })
-MAP('c', '<M-l>', '<Right>', { silent = false, desc = 'Right' })
-MAP('i', '<M-h>', '<Left>', { noremap = false, desc = 'Left' })
-MAP('i', '<M-j>', '<Down>', { noremap = false, desc = 'Down' })
-MAP('i', '<M-k>', '<Up>', { noremap = false, desc = 'Up' })
-MAP('i', '<M-l>', '<Right>', { noremap = false, desc = 'Right' })
-MAP('t', '<M-h>', '<Left>', { desc = 'Left' })
-MAP('t', '<M-j>', '<Down>', { desc = 'Down' })
-MAP('t', '<M-k>', '<Up>', { desc = 'Up' })
-MAP('t', '<M-l>', '<Right>', { desc = 'Right' })
+MAP({ 'c', 'i', 't' }, '<M-h>', '<Left>', { noremap = false, desc = 'Left' })
+MAP({ 'c', 'i', 't' }, '<M-j>', '<Down>', { noremap = false, desc = 'Down' })
+MAP({ 'c', 'i', 't' }, '<M-k>', '<Up>', { noremap = false, desc = 'Up' })
+MAP({ 'c', 'i', 't' }, '<M-l>', '<Right>', { noremap = false, desc = 'Right' })
 
 -- Dot-repeatable lines insertions calling helper functions
 MAP('n', 'gO', 'v:lua.KEYMAP_PUT_EMPTY_LINE(v:true)', { expr = true, desc = 'Put empty line above' })
