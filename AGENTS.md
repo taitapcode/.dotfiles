@@ -30,7 +30,7 @@ The repo follows a fixed top-level layout; each directory holds **many** files o
 .dotfiles/
 ├── flake.nix          # entrypoint
 ├── assets/            # static resources (images, wallpapers, avatars, screenshots) — any number of files
-├── config/            # raw dotfiles mirroring ~/.config structure; sourced by modules via `self + "/config/<app>/..."` (home.file for each top-level app dir). Anything here maps 1:1 onto a config app/subdir.
+├── config/            # raw dotfiles sourced by modules via `self + "/config/<app>/..."`; how each app dir lands in the system is defined per-module, not a fixed 1:1 mirror of ~/.config (e.g. config/nvim/ — the `config/`, `helper/`, `plugin/` subdirs are inlined into a generated init.lua via builtins.readFile, only some subpaths are linked via xdg.configFile).
 ├── hosts/<host>/      # per-machine NixOS config; each host = one dir, enabled `<host>` attr in flake
 ├── modules/
 │   ├── home-manager/  # one file per module under app/ programs/ desktop/ (see below)
@@ -40,7 +40,7 @@ The repo follows a fixed top-level layout; each directory holds **many** files o
 
 Conventions when adding files:
 
-- **`config/`**: add the whole app dir as-is (mirror of `~/.config`); wire it into the matching home-manager module. No per-file listing needed.
+- **`config/`**: add the whole app dir as-is (mirror of `~/.config`); wire it into the matching home-manager module and read the module to see how each subpath is consumed (xdg.configFile link vs. builtins.readFile -> generated init) before assuming it lands 1:1 in `~/.config/<app>`.
 - **`modules/`**: one module per file, named `<name>.nix`, placed under the category dir (`programs/`, `app/`, `desktop/` for home; `program/`, `service/` for nixos). Groups of related modules may live in a subdir with their own `default.nix` (e.g. `desktop/shell/`).
 - **`hosts/`**: add a new host by creating `<name>/configuration.nix` + `<name>/home.nix` and exporting a `nixosConfigurations.<name>` in `flake.nix`.
 - **`scripts/`**: add a new `scripts/<name>.sh` and expose it as `packages.${system}.<name>` in `flake.nix`.
