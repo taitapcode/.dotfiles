@@ -77,3 +77,4 @@ Each helper is `scripts/<name>.sh`, wrapped as `packages.${system}.<name>` in `f
 - Username `tai`, home `/home/tai`, state version `26.05`.
 - Theme: Catppuccin Mocha (accent blue) — home level both hosts, system level only `asus-tuf`.
 - Format Nix with nixfmt; keep modules small and single-purpose.
+- `flake.lock` updates don't need their own commit — bundle the lockfile bump with whatever commit changes the config that depends on it (e.g. a new package in `home.nix`), rather than committing `flake.lock` alone.
