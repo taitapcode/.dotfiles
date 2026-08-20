@@ -75,6 +75,7 @@ in
           "browser.translations.automaticallyPopup" = false;
           "ui.systemUsesDarkTheme" = 1;
           "general.autoScroll" = true;
+          "layout.spellcheckDefault" = 0;
         };
 
         mods = [
