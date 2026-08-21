@@ -26,6 +26,14 @@ end
 
 local fcitx_group = vim.api.nvim_create_augroup('FcitxSwitch', { clear = true })
 
+-- When entering Neovim: switch to the default (US) layout
+vim.api.nvim_create_autocmd('VimEnter', {
+  group = fcitx_group,
+  callback = function()
+    set_layout(default_layout)
+  end,
+})
+
 -- When leaving Insert mode: Save the exact current layout and switch back to default layout
 vim.api.nvim_create_autocmd('InsertLeave', {
   group = fcitx_group,
