@@ -98,6 +98,8 @@ in
           position = "top_center";
         };
 
+        osd.kinds.keyboard_layout = false;
+
         plugins.enabled = [ ];
 
         shell = {
