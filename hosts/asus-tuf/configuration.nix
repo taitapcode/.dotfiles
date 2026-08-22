@@ -99,7 +99,7 @@
     curl
     btop
     wl-clipboard
-    nodejs
+    bun
   ];
 
   fonts = {
