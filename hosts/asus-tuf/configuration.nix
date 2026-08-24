@@ -100,6 +100,7 @@
     btop
     wl-clipboard
     bun
+    uv
   ];
 
   fonts = {
