@@ -6,10 +6,12 @@ Declarative NixOS setup managed as a flake with home-manager, managed via `nh`.
 
 Both hosts use hostname `nixos`, so `nh` can't infer which configuration to build from that — always pass `-H <flake-attr>` (the `nixosConfiguration` name, `asus-tuf` or `acer-aspire`), e.g. `nh os build -H asus-tuf` or `nh os switch -H asus-tuf`.
 
+**The user builds and switches manually — never run `nh os build` or `nh os switch` (or any other system activation/build command) on your own. Only verify evaluation (`nix flake check`, `nix eval ...system.build.toplevel.drvPath`) unless the user explicitly asks for a build/switch.**
+
 - Check the flake evaluates (no build): `nix flake check`
 - Update lockfile: `nix flake update` (run from the repo root)
-- Build (dry run, no switch): `nh os build -H <host>`
-- Switch to the current machine config: `nh os switch -H <host>`
+- Build (dry run, no switch; user runs this): `nh os build -H <host>`
+- Switch to the current machine config (user runs this): `nh os switch -H <host>`
 
 ## Flake
 
