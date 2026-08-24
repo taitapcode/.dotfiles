@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  inputs,
   self,
   ...
 }:
@@ -11,8 +10,6 @@ let
   defaultWallpaper = "${wallpaperPath}/3.png";
 in
 {
-  imports = [ inputs.noctalia.homeModules.default ];
-
   options.modules.home.desktop.shell.noctalia.enable =
     lib.mkEnableOption "Enable Noctalia shell configuration";
 

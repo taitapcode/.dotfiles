@@ -16,7 +16,8 @@ Both hosts use hostname `nixos`, so `nh` can't infer which configuration to buil
 `flake.nix` is the entrypoint. `system = "x86_64-linux"`.
 
 - `nixpkgs` is pinned to `nixos-unstable`. All other inputs follow it so the whole tree builds from one nixpkgs.
-- Inputs: `catppuccin`, `nixos-hardware`, `home-manager`, `noctalia` (full shell, DSL config via `programs.noctalia.settings`), `zen-browser` (flake also follows our `home-manager`), `fcitx5-lotus` (pulls in snowfall-lib).
+- Inputs: `catppuccin`, `nixos-hardware`, `home-manager`, `zen-browser` (flake also follows our `home-manager`), `fcitx5-lotus` (pulls in snowfall-lib).
+- Noctalia shell is configured via home-manager's built-in `programs.noctalia` module (package from `pkgs.noctalia`); there is no dedicated noctalia flake input.
 - Outputs:
   - `packages.${system}.note` / `.rcc` — flake packages wrapping `scripts/note.sh` / `scripts/rcc.sh` via `writeShellApplication`.
   - `nixosConfigurations.acer-aspire` and `nixosConfigurations.asus-tuf`, both with `specialArgs = { inherit inputs self; }` + `home-manager.nixosModules.default`. `asus-tuf` additionally imports `nixos-hardware.nixosModules.asus-fa506nc`.
