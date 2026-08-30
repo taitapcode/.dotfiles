@@ -14,8 +14,9 @@ in
 
   config = lib.mkIf cfg.enable {
     xdg.configFile."nvim/snippets".source = nvimConfig + "snippets";
-    xdg.configFile."nvim/stylua.toml".source = nvimConfig + "stylua.toml";
-    xdg.configFile."nvim/clang-format".source = nvimConfig + "clang-format";
+    xdg.configFile."nvim/stylua.toml".source = nvimConfig + "external/stylua.toml";
+    xdg.configFile."nvim/clang-format".source = nvimConfig + "external/clang-format";
+    xdg.configFile."asm-lsp/.asm-lsp.toml".source = nvimConfig + "external/asm-lsp.toml";
 
     programs.neovim =
       let

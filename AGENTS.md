@@ -33,7 +33,7 @@ The repo follows a fixed top-level layout; each directory holds **many** files o
 .dotfiles/
 ├── flake.nix          # entrypoint
 ├── assets/            # static resources (images, wallpapers, avatars, screenshots) — any number of files
-├── config/            # raw dotfiles sourced by modules via `self + "/config/<app>/..."`; how each app dir lands in the system is defined per-module, not a fixed 1:1 mirror of ~/.config (e.g. config/nvim/ — the `config/`, `helper/`, `plugin/` subdirs are inlined into a generated init.lua via builtins.readFile, only some subpaths are linked via xdg.configFile).
+├── config/            # raw dotfiles sourced by modules via `self + "/config/<app>/..."`; how each app dir lands in the system is defined per-module, not a fixed 1:1 mirror of ~/.config (e.g. config/nvim/ — the `config/`, `helper/`, `plugin/` subdirs are inlined into a generated init.lua via builtins.readFile, only `external/` subdir is linked via xdg.configFile; e.g. config/nvim/external/.asm-lsp.toml is linked to xdg.configFile."asm-lsp/.asm-lsp.toml".source).
 ├── hosts/<host>/      # per-machine NixOS config; each host = one dir, enabled `<host>` attr in flake
 ├── modules/
 │   ├── home-manager/  # one file per module under app/ programs/ desktop/ (see below)
