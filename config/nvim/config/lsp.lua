@@ -10,6 +10,7 @@ vim.lsp.enable({
   'bashls',
   'gdscript',
   'copilot',
+  'asm_lsp',
 })
 
 vim.lsp.config('nixd', {

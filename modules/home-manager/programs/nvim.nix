@@ -126,6 +126,7 @@ in
           bash-language-server
           nixd
           copilot-language-server
+          asm-lsp
 
           # Formatter
           stylua

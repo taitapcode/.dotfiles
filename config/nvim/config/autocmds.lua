@@ -137,6 +137,15 @@ vim.api.nvim_create_autocmd('TermOpen', {
   desc = 'Start terminal in Insert mode',
 })
 
+-- MIPS filetype for asm-lsp
+vim.filetype.add({
+  extension = {
+    asm = 'asm',
+    s = 'asm',
+    S = 'asm',
+  },
+})
+
 -- Enable Treesitter
 vim.api.nvim_create_autocmd('FileType', {
   callback = function()
