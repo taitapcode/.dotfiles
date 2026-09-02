@@ -120,7 +120,7 @@
       ghostty.enable = true;
       vesktop.enable = true;
       mpv.enable = true;
-      # anki.enable = true;
+      anki.enable = true;
       qbittorrent.enable = true;
       zathura.enable = true;
       helium.enable = true;

@@ -75,7 +75,7 @@ in
             "org.gnome.Nautilus"
             "vesktop"
             "org.pwmt.zathura"
-            # "anki"
+            "anki"
             "steam"
             "helium"
             "LocalSend"
