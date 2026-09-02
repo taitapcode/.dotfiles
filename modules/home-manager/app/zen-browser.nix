@@ -29,6 +29,46 @@ in
               private_browsing = pluginConfig.private_allow or true;
             }
           );
+          uboFilterLists = [
+            # uBlock filters 5/5
+            "ublock-filters"
+            "ublock-badware"
+            "ublock-privacy"
+            "ublock-quick-fixes"
+            "ublock-unbreak"
+            # Ads 2/3 (removed adguard-mobile)
+            "easylist"
+            "adguard-generic"
+            # Privacy 3/3
+            "easyprivacy"
+            "adguard-spyware-url"
+            "block-lan"
+            # Malware / Multipurpose 2/2
+            "urlhaus-1"
+            "plowe-0"
+            "dpollock-0"
+            # Cookie notices 4/4
+            "fanboy-cookiemonster"
+            "ublock-cookies-easylist"
+            "adguard-cookies"
+            "ublock-cookies-adguard"
+            # Social widgets 3/3
+            "fanboy-social"
+            "adguard-social"
+            "fanboy-thirdparty_social"
+            # Annoyances 10/10 (5 EasyList + 4 AdGuard + uBO)
+            "easylist-annoyances"
+            "easylist-chat"
+            "easylist-newsletters"
+            "easylist-notifications"
+            "fanboy-ai-suggestions"
+            "adguard-popup-overlays"
+            "adguard-other-annoyances"
+            "adguard-widgets"
+            "ublock-annoyances"
+            # Regions
+            "VIE-1"
+          ];
         in
         {
           AutofillAddressEnabled = false;
@@ -58,6 +98,15 @@ in
               id = "clearurls";
             };
           };
+
+          # uBlock Origin >=1.74 - managed storage per src/js/storage.js:1392 (vAPI.adminStorage.get(['adminSettings','toOverwrite']))
+          # toOverwrite must be TOP-LEVEL sibling of adminSettings, not nested inside it
+          # Tokens from https://github.com/gorhill/uBlock/blob/master/assets/assets.json
+          # After switch: about:policies should show 3rdparty...toOverwrite.filterLists, then uBO Dashboard -> Reset to default settings
+          "3rdparty".Extensions."uBlock0@raymondhill.net".toOverwrite.filterLists = [
+            "user-filters"
+          ]
+          ++ uboFilterLists;
         };
 
       profiles.default = {
