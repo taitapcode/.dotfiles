@@ -15,9 +15,9 @@ in
       enable = true;
 
       # NVIDIA hardware acceleration
-      package = pkgs.obs-studio.override {
-        cudaSupport = true;
-      };
+      # package = pkgs.obs-studio.override {
+      # cudaSupport = true;
+      # };
 
       plugins = with pkgs.obs-studio-plugins; [
         wlrobs
