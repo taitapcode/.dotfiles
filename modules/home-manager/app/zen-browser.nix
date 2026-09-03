@@ -99,10 +99,7 @@ in
             };
           };
 
-          # uBlock Origin >=1.74 - managed storage per src/js/storage.js:1392 (vAPI.adminStorage.get(['adminSettings','toOverwrite']))
-          # toOverwrite must be TOP-LEVEL sibling of adminSettings, not nested inside it
-          # Tokens from https://github.com/gorhill/uBlock/blob/master/assets/assets.json
-          # After switch: about:policies should show 3rdparty...toOverwrite.filterLists, then uBO Dashboard -> Reset to default settings
+          # https://github.com/gorhill/uBlock/blob/master/assets/assets.json
           "3rdparty".Extensions."uBlock0@raymondhill.net".toOverwrite.filterLists = [
             "user-filters"
           ]
