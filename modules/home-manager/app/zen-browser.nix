@@ -211,23 +211,23 @@ in
                 isEssential = true;
                 container = 1;
               };
+              "NotebookLM" = {
+                id = "f41edcd1-b367-409f-ad80-506924daf97e";
+                url = "https://notebook.google.com/";
+                position = 106;
+                isEssential = true;
+                container = 1;
+              };
               "Facebook" = {
                 id = "3757ac88-55f5-4466-8111-18b6458cde11";
                 url = "https://facebook.com";
-                position = 106;
+                position = 107;
                 isEssential = true;
                 container = 1;
               };
               "Gemini" = {
                 id = "1cd614cf-cb2a-4e9d-97ba-b42be17ca761";
                 url = "https://gemini.google.com/app";
-                position = 107;
-                isEssential = true;
-                container = 1;
-              };
-              "Claude" = {
-                id = "f41edcd1-b367-409f-ad80-506924daf97e";
-                url = "https://claude.ai/";
                 position = 108;
                 isEssential = true;
                 container = 1;
