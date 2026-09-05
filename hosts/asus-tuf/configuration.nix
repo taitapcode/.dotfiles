@@ -206,6 +206,7 @@
 
   # Programs
   programs = {
+    nix-ld.enable = true;
     niri = {
       enable = true;
       useNautilus = true;
