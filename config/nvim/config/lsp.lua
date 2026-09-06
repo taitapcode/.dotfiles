@@ -6,7 +6,7 @@ vim.lsp.enable({
   'lua_ls',
   'fish_lsp',
   'clangd',
-  'basedpyright',
+  'pyright',
   'bashls',
   'gdscript',
   'copilot',

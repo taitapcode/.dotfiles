@@ -19,7 +19,7 @@ in
         lua-language-server
         fish-lsp
         clang-tools
-        basedpyright
+        pyright
         bash-language-server
         nixd
       ];
@@ -49,9 +49,9 @@ in
               ".hpp"
             ];
           };
-          basedpyright = {
+          pyright = {
             command = [
-              "basedpyright-langserver"
+              "pyright-langserver"
               "--stdio"
             ];
             extensions = [ ".py" ];

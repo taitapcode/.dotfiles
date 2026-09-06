@@ -122,7 +122,7 @@ in
           lua-language-server
           fish-lsp
           clang-tools
-          basedpyright
+          pyright
           bash-language-server
           nixd
           copilot-language-server
