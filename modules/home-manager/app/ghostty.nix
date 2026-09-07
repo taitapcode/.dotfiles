@@ -13,7 +13,7 @@ in
 
       settings = {
         font-family = "CaskaydiaCove Nerd Font";
-        font-size = 17;
+        font-size = 19;
         window-decoration = false;
       };
     };
