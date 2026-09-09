@@ -101,6 +101,7 @@
     wl-clipboard
     bun
     uv
+    mars-mips
   ];
 
   fonts = {
@@ -188,6 +189,9 @@
 
   services.asusd.enable = true;
   powerManagement.powertop.enable = false;
+
+  # Cloudflare Warp VPN
+  services.cloudflare-warp.enable = true;
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
