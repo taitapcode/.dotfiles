@@ -32,6 +32,30 @@ in
         vimAlias = true;
         vimdiffAlias = true;
 
+        extraPackages = with pkgs; [
+          wl-clipboard
+          xclip
+          lazygit
+          ripgrep
+          fzf
+
+          # Lsp
+          lua-language-server
+          fish-lsp
+          clang-tools
+          pyright
+          bash-language-server
+          nixd
+          copilot-language-server
+          asm-lsp
+
+          # Formatter
+          stylua
+          black
+          prettierd
+          nixfmt
+        ];
+
         plugins = with pkgs.vimPlugins; [
           blink-copilot
           nvim-lspconfig
@@ -109,30 +133,6 @@ in
             plugin = render-markdown-nvim;
             config = loadPluginConfig "render-markdown";
           }
-        ];
-
-        extraPackages = with pkgs; [
-          wl-clipboard
-          xclip
-          lazygit
-          ripgrep
-          fzf
-
-          # Lsp
-          lua-language-server
-          fish-lsp
-          clang-tools
-          pyright
-          bash-language-server
-          nixd
-          copilot-language-server
-          asm-lsp
-
-          # Formatter
-          stylua
-          black
-          prettierd
-          nixfmt
         ];
 
         initLua = ''

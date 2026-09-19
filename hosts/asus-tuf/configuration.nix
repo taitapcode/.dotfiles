@@ -94,16 +94,6 @@
     )
   '';
 
-  environment.systemPackages = with pkgs; [
-    wget
-    curl
-    btop
-    wl-clipboard
-    bun
-    uv
-    mars-mips
-  ];
-
   fonts = {
     enableDefaultPackages = true;
     packages = with pkgs; [
@@ -149,10 +139,18 @@
 
     shell = pkgs.fish;
     packages = with pkgs; [
+      wget
+      curl
+      btop
+      wl-clipboard
+      bun
+      uv
       nautilus
       peazip
       libreoffice
       loupe
+      mars-mips
+      antigravity-ide
 
       self.packages.${pkgs.stdenv.hostPlatform.system}.note
       self.packages.${pkgs.stdenv.hostPlatform.system}.rcc
@@ -226,7 +224,10 @@
     program = {
       fcitx5.enable = true;
       waydroid.enable = true;
-      steam.enable = true;
+      steam = {
+        enable = true;
+        useSpecialisation = true;
+      };
       localsend.enable = true;
     };
   };

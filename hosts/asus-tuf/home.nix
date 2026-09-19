@@ -111,7 +111,7 @@
       nh.enable = true;
       eza.enable = true;
       bat.enable = true;
-      mangohud.enable = true;
+      # mangohud.enable = true;
       kanshi.enable = true;
       nix-index.enable = true;
     };

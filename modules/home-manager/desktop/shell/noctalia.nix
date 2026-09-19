@@ -76,7 +76,6 @@ in
             "vesktop"
             "org.pwmt.zathura"
             "anki"
-            "steam"
             "helium"
             "LocalSend"
             "com.obsproject.Studio"
