@@ -10,10 +10,13 @@ require('conform').setup({
     cpp = { 'clang_format' },
   },
   formatters = {
-    ['clang_format'] = {
+    clang_format = {
       prepend_args = {
         '-style=file:' .. vim.fn.stdpath('config') .. '/clang-format',
       },
+    },
+    black = {
+      prepend_args = { '--line-length', '100' },
     },
     stylua = {
       prepend_args = {

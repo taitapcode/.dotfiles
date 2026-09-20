@@ -14,7 +14,6 @@
     ./bat.nix
     ./eza.nix
     ./nh.nix
-    ./mangohud.nix
     ./kanshi.nix
     ./nix-index.nix
   ];

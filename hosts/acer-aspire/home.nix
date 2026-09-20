@@ -77,8 +77,7 @@
     "application/msword" = "libreoffice-writer.desktop";
     "application/vnd.openxmlformats-officedocument.wordprocessingml.document" =
       "libreoffice-writer.desktop";
-    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" =
-      "libreoffice-calc.desktop";
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" = "libreoffice-calc.desktop";
     "application/vnd.openxmlformats-officedocument.presentationml.presentation" =
       "libreoffice-impress.desktop";
 
@@ -112,7 +111,6 @@
       nh.enable = true;
       eza.enable = true;
       bat.enable = true;
-      mangohud.enable = true;
       kanshi.enable = true;
     };
     app = {
