@@ -119,7 +119,6 @@
       vesktop.enable = true;
       mpv.enable = true;
       anki.enable = true;
-      qbittorrent.enable = true;
       zathura.enable = true;
     };
     desktop.niri.enable = true;

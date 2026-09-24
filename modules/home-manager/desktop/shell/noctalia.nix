@@ -79,7 +79,6 @@ in
             "helium"
             "LocalSend"
             "com.obsproject.Studio"
-            "org.qbittorrent.qBittorrent"
           ];
           position = "bottom";
           reserve_space = false;
