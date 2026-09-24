@@ -7,7 +7,6 @@
     ./vesktop.nix
     ./mpv.nix
     ./anki.nix
-    ./qbittorrent.nix
     ./zathura.nix
     ./helium.nix
     ./obs.nix

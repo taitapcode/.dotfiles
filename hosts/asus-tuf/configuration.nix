@@ -151,6 +151,7 @@
       loupe
       mars-mips
       antigravity-ide
+      qbittorrent
 
       self.packages.${pkgs.stdenv.hostPlatform.system}.note
       self.packages.${pkgs.stdenv.hostPlatform.system}.rcc
