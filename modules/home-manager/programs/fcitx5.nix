@@ -16,6 +16,7 @@ in
       GTK_IM_MODULE = "fcitx5";
       QT_IM_MODULE = "fcitx5";
       XMODIFIERS = "@im=fcitx5";
+      NIXOS_OZONE_WL = "1";
     };
 
     xdg.configFile."fcitx5".source = self + "/config/fcitx5";
