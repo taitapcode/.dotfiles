@@ -139,18 +139,21 @@
 
     shell = pkgs.fish;
     packages = with pkgs; [
+      gnumake
+      cmake
+      gcc
+      bun
+      uv
+
       wget
       curl
       btop
       wl-clipboard
-      bun
-      uv
       nautilus
       peazip
       libreoffice
       loupe
       mars-mips
-      antigravity-ide
       qbittorrent
 
       self.packages.${pkgs.stdenv.hostPlatform.system}.note

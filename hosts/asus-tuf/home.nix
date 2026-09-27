@@ -123,6 +123,7 @@
       zathura.enable = true;
       helium.enable = true;
       obs.enable = true;
+      antigravity.enable = true;
     };
     desktop.niri.enable = true;
   };

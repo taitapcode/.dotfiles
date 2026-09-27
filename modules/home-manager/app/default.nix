@@ -10,5 +10,6 @@
     ./zathura.nix
     ./helium.nix
     ./obs.nix
+    ./antigravity.nix
   ];
 }
