@@ -53,12 +53,6 @@ end, { desc = 'Buffers' })
 MAP('n', '<leader>/', function()
   Snacks.picker.grep({ layout = { preset = 'ivy' } })
 end, { desc = 'Grep' })
-MAP('n', '<leader>fc', function()
-  Snacks.picker.files({
-    cwd = vim.fn.stdpath('config'),
-    layout = { preset = 'ivy' },
-  })
-end, { desc = 'Find Config File' })
 MAP('n', '<leader>:', function()
   Snacks.picker.command_history()
 end, { desc = 'Command History' })
