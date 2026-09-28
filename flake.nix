@@ -57,38 +57,42 @@
       ...
     }@inputs:
     let
-      system = "x86_64-linux";
+      supportedSystems = [
+        "x86_64-linux"
+        "aarch64-linux"
+        "aarch64-darwin"
+      ];
+      forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
+
+      scanModules =
+        path:
+        builtins.filter
+          (p: baseNameOf p != "default.nix" && nixpkgs.lib.hasSuffix ".nix" (toString p))
+          (nixpkgs.lib.filesystem.listFilesRecursive path);
+
+      nixosModulesList = scanModules ./modules/nixos;
+      homeModulesList = scanModules ./modules/home-manager;
     in
     {
-      packages.${system} =
-        let
-          pkgs = nixpkgs.legacyPackages.${system};
-        in
-        {
-          note = pkgs.writeShellApplication {
-            name = "note";
-            runtimeInputs = [
-              pkgs.git
-              pkgs.neovim
-              pkgs.coreutils
-            ];
-            text = builtins.readFile ./scripts/note.sh;
-          };
-          rcc = pkgs.writeShellApplication {
-            name = "rcc";
-            runtimeInputs = [
-              pkgs.gcc
-            ];
-            text = builtins.readFile ./scripts/rcc.sh;
-          };
-        };
+      packages = forAllSystems (
+        system: import ./scripts nixpkgs.legacyPackages.${system}
+      );
+
+      overlays.default = final: prev: {
+        myScripts = import ./scripts final;
+      };
+
       nixosConfigurations = {
         acer-aspire = nixpkgs.lib.nixosSystem {
           specialArgs = { inherit inputs self; };
           modules = [
             ./hosts/acer-aspire/configuration.nix
             home-manager.nixosModules.default
-          ];
+            {
+              nixpkgs.overlays = [ self.overlays.default ];
+              home-manager.users.tai.imports = homeModulesList;
+            }
+          ] ++ nixosModulesList;
         };
         asus-tuf = nixpkgs.lib.nixosSystem {
           specialArgs = { inherit inputs self; };
@@ -96,7 +100,11 @@
             ./hosts/asus-tuf/configuration.nix
             home-manager.nixosModules.default
             nixos-hardware.nixosModules.asus-fa506nc
-          ];
+            {
+              nixpkgs.overlays = [ self.overlays.default ];
+              home-manager.users.tai.imports = homeModulesList;
+            }
+          ] ++ nixosModulesList;
         };
       };
     };

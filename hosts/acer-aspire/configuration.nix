@@ -8,7 +8,6 @@
 {
   imports = [
     ./hardware.nix
-    ../../modules/nixos
   ];
 
   boot.loader.grub.enable = true;
@@ -96,7 +95,7 @@
       btop
       loupe
 
-      self.packages.${pkgs.stdenv.hostPlatform.system}.note
+      myScripts.note
     ];
   };
 

@@ -7,7 +7,6 @@
 {
   imports = [
     inputs.catppuccin.homeModules.catppuccin
-    ../../modules/home-manager
   ];
 
   home.username = "tai";

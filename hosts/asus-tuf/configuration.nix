@@ -9,7 +9,6 @@
   imports = [
     inputs.catppuccin.nixosModules.catppuccin
     ./hardware.nix
-    ../../modules/nixos
   ];
 
   boot.loader.grub.enable = true;
@@ -156,8 +155,8 @@
       mars-mips
       qbittorrent
 
-      self.packages.${pkgs.stdenv.hostPlatform.system}.note
-      self.packages.${pkgs.stdenv.hostPlatform.system}.rcc
+      myScripts.note
+      myScripts.rcc
     ];
   };
 

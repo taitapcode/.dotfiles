@@ -9,9 +9,6 @@ let
   cfg = config.modules.home.desktop.niri;
 in
 {
-  imports = [
-    ./shell
-  ];
 
   options.modules.home.desktop.niri.enable = lib.mkEnableOption "Enable Niri configuration";
 

@@ -8,12 +8,6 @@ let
   cfg = config.modules.home.programs.fish;
 in
 {
-  imports = [
-    ./fzf.nix
-    ./zoxide.nix
-    ./yazi.nix
-    ./nix-index.nix
-  ];
 
   options.modules.home.programs.fish.enable = lib.mkEnableOption "Enable Fish shell configuration";
 

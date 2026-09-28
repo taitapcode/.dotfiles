@@ -1,83 +1,208 @@
-# Dotfiles
+# Dotfiles — AI Agent Guidelines & Architecture Rules
 
-Declarative NixOS setup managed as a flake with home-manager, managed via `nh`.
+Declarative NixOS configuration managed as a Nix flake with Home Manager, built and deployed via `nh`.
 
-## Rebuild & Verify
+---
 
-Both hosts use hostname `nixos`, so `nh` can't infer which configuration to build from that — always pass `-H <flake-attr>` (the `nixosConfiguration` name, `asus-tuf` or `acer-aspire`), e.g. `nh os build -H asus-tuf` or `nh os switch -H asus-tuf`.
+## 1. Safety & Execution Bounds (CRITICAL)
 
-**The user builds and switches manually — never run `nh os build` or `nh os switch` (or any other system activation/build command) on your own. Only verify evaluation (`nix flake check`, `nix eval ...system.build.toplevel.drvPath`) unless the user explicitly asks for a build/switch.**
+- **MANUAL ACTIVATION ONLY**: The user builds and activates system generations manually.
+  - **NEVER** run `nh os build`, `nh os switch`, `nixos-rebuild`, `home-manager switch`, `systemctl`, `reboot`, or `poweroff`.
+  - **NEVER** run any command that modifies system state or user environment directly.
+- **Dry Verification Only**:
+  - Always verify changes via pure evaluation before declaring tasks complete:
+    - Flake evaluation check: `nix flake check`
+    - Target host evaluation: `nix eval .#nixosConfigurations.asus-tuf.config.system.build.toplevel.drvPath`
+  - Rebuilding or switching is reserved exclusively for the user.
+- **Working Tree Integrity**:
+  - Never discard uncommitted changes (`git restore`, `git checkout --`) without explicit user permission. Always inspect `git status` and `git diff` first.
 
-- Check the flake evaluates (no build): `nix flake check`
-- Update lockfile: `nix flake update` (run from the repo root)
-- Build (dry run, no switch; user runs this): `nh os build -H <host>`
-- Switch to the current machine config (user runs this): `nh os switch -H <host>`
+---
 
-## Flake
+## 2. System Architecture & Target Environments
 
-`flake.nix` is the entrypoint. `system = "x86_64-linux"`.
+The repository defines two NixOS host configurations (`nixosConfigurations`):
 
-- `nixpkgs` is pinned to `nixos-unstable`. All other inputs follow it so the whole tree builds from one nixpkgs.
-- Inputs: `catppuccin`, `nixos-hardware`, `home-manager`, `zen-browser` (flake also follows our `home-manager`), `fcitx5-lotus` (pulls in snowfall-lib).
-- Noctalia shell is configured via home-manager's built-in `programs.noctalia` module (package from `pkgs.noctalia`); there is no dedicated noctalia flake input.
-- Outputs:
-  - `packages.${system}.note` / `.rcc` — flake packages wrapping `scripts/note.sh` / `scripts/rcc.sh` via `writeShellApplication`.
-  - `nixosConfigurations.acer-aspire` and `nixosConfigurations.asus-tuf`, both with `specialArgs = { inherit inputs self; }` + `home-manager.nixosModules.default`. `asus-tuf` additionally imports `nixos-hardware.nixosModules.asus-fa506nc`.
-- Enable auto-chains: `modules.home.programs.fish` also enables `fzf`, `zoxide`, `yazi`; `modules.home.desktop.niri` also enables `desktop.shell.noctalia`.
+### Primary Target: `asus-tuf` (Daily Driver / Active)
+- **Model**: ASUS TUF Gaming A15 (FA506NC).
+- **Architecture**: `x86_64-linux`, AMD CPU + NVIDIA GeForce RTX 3050.
+- **Hardware Integration**:
+  - Uses `nixos-hardware.nixosModules.asus-fa506nc`.
+  - NVIDIA settings: `modesetting.enable = true`, `powerManagement.enable = true`, `nvidiaPersistenced = true`.
+  - Power / Battery daemon: `services.asusd` (charge limit 80%, automated profiles on AC / battery).
+- **Filesystems & Services**:
+  - Storage: NTFS partition mounted at `/mnt/Storage` (`ntfs3`).
+  - Network: Cloudflare WARP VPN service (`services.cloudflare-warp.enable = true`).
+  - Desktop Environment: Niri (scrollable-tiling Wayland compositor) with Noctalia shell bar.
+  - Audio: PipeWire with PulseAudio emulation.
+  - Display Manager: SDDM.
+  - Shell: Fish with vi keybindings, fzf, zoxide, yazi, and custom prompt.
+  - Theme: Catppuccin Mocha (accent: `blue`) applied system-wide and in Home Manager.
+- **All new modules, packages, and changes MUST target and be verified against `asus-tuf`.**
 
-## Folder Structure
+### Deprecated / Reference: `acer-aspire`
+- **Status**: Legacy backup host, no longer actively used.
+- **Guideline**: Do not build against or introduce breaking changes to this configuration, but ensure flake evaluation does not break (`nix flake check`).
 
-The repo follows a fixed top-level layout; each directory holds **many** files of the same kind, so do not rely on a fixed file list — discover actual contents with glob/file search before touching anything.
+---
+
+## 3. Flake Design & Dependency Management
+
+`flake.nix` is the central entrypoint (`system = "x86_64-linux"`).
+
+### Flake Inputs
+- `nixpkgs`: Pinned to `github:nixos/nixpkgs/nixos-unstable`.
+- **Consistency Rule**: All flake inputs must follow `nixpkgs` (`inputs.nixpkgs.follows = "nixpkgs"`) to avoid duplicate package closures in the Nix store (e.g., `catppuccin`, `nixos-hardware`, `home-manager`, `zen-browser`, `fcitx5-lotus`, `helium-flake`, `nix-index-database`, `antigravity-nix`).
+- **Zen Browser**: Flake input follows both `nixpkgs` and `home-manager`.
+- **Noctalia Shell**: Packaged directly via `pkgs.noctalia` in Nixpkgs; configured through Home Manager's built-in `programs.noctalia` module (no standalone flake input required).
+
+### Flake Outputs
+- `packages.${system}`:
+  - Custom shell helpers wrapped via `pkgs.writeShellApplication`:
+    - `packages.x86_64-linux.note`: Wraps `scripts/note.sh` (runtime inputs: `git`, `neovim`, `coreutils`).
+    - `packages.x86_64-linux.rcc`: Wraps `scripts/rcc.sh` (runtime inputs: `gcc`).
+- `nixosConfigurations`:
+  - `asus-tuf` and `acer-aspire`, both passed `specialArgs = { inherit inputs self; }` and `home-manager.nixosModules.default`.
+
+### Flake Operations
+- **Lockfile updates**: Run `nix flake update` from the repository root.
+- **Lockfile commits**: Never commit `flake.lock` in isolation. Bundle lock updates with the commit adding/updating the dependent package or module.
+
+---
+
+## 4. Repository Layout & File Wiring
 
 ```
 .dotfiles/
-├── flake.nix          # entrypoint
-├── assets/            # static resources (images, wallpapers, avatars, screenshots) — any number of files
-├── config/            # raw dotfiles sourced by modules via `self + "/config/<app>/..."`; how each app dir lands in the system is defined per-module, not a fixed 1:1 mirror of ~/.config (e.g. config/nvim/ — the `config/`, `helper/`, `plugin/` subdirs are inlined into a generated init.lua via builtins.readFile, only `external/` subdir is linked via xdg.configFile; e.g. config/nvim/external/.asm-lsp.toml is linked to xdg.configFile."asm-lsp/.asm-lsp.toml".source).
-├── hosts/<host>/      # per-machine NixOS config; each host = one dir, enabled `<host>` attr in flake
+├── flake.nix                # Root entrypoint declaring inputs, packages, and nixosConfigurations
+├── flake.lock               # Pinned input hashes
+├── assets/                  # Wallpapers, icons, images (referenced via `${self}/assets/...`)
+├── config/                  # Raw application configuration files (mirrored or consumed by modules)
+├── hosts/                   # Machine-specific configurations
+│   ├── asus-tuf/            # Active machine (configuration.nix, hardware.nix, home.nix)
+│   └── acer-aspire/         # Deprecated machine
 ├── modules/
-│   ├── home-manager/  # one file per module under app/ programs/ desktop/ (see below)
-│   └── nixos/         # one file per module under program/ service/
-└── scripts/           # one *.sh helper per flake package/lazy-exec; each is wrapped via writeShellApplication
+│   ├── home-manager/        # User-level modules (app/, programs/, desktop/)
+│   └── nixos/               # System-level modules (program/, service/)
+└── scripts/                 # Standalone bash helpers wrapped into flake packages
 ```
 
-Conventions when adding files:
+### Path Resolution Rules
+- **CRITICAL**: **NEVER hardcode absolute home paths (`/home/tai/...`) or local clone paths in Nix expressions.**
+- Always reference assets and configs via `self`:
+  - `${self}/config/<app>/...`
+  - `self + "/config/<app>"`
+  - `${self}/assets/wallpapers/3.png`
 
-- **`config/`**: add the whole app dir as-is (mirror of `~/.config`); wire it into the matching home-manager module and read the module to see how each subpath is consumed (xdg.configFile link vs. builtins.readFile -> generated init) before assuming it lands 1:1 in `~/.config/<app>`.
-- **`modules/`**: one module per file, named `<name>.nix`, placed under the category dir (`programs/`, `app/`, `desktop/` for home; `program/`, `service/` for nixos). Groups of related modules may live in a subdir with their own `default.nix` (e.g. `desktop/shell/`).
-- **`hosts/`**: add a new host by creating `<name>/configuration.nix` + `<name>/home.nix` and exporting a `nixosConfigurations.<name>` in `flake.nix`.
-- **`scripts/`**: add a new `scripts/<name>.sh` and expose it as `packages.${system}.<name>` in `flake.nix`.
-- **`assets/`**: drop files here; reference by `self + "/assets/<file>"`.
+### Configuration Consumption Patterns (`config/` -> modules)
+Different applications consume `config/` differently. Always check the existing module before editing or wiring configs:
+1. **Directory Symlink** (e.g., Niri):
+   - Whole directory symlinked via `xdg.configFile."niri".source = self + "/config/niri";`.
+2. **File Inlining via `builtins.readFile`** (e.g., Neovim):
+   - Lua configs (`helper/*.lua`, `config/*.lua`, `plugin/*.lua`) are read into Nix strings and injected into Neovim options/plugins.
+   - External tooling configs (`stylua.toml`, `clang-format`, `asm-lsp.toml`, snippets) are selectively symlinked via `xdg.configFile`.
+3. **Specific File Symlink** (e.g., Fcitx5):
+   - Individual conf files linked directly to `xdg.configFile."fcitx5/..."`.
 
-## Hosts
+---
 
-Both hosts share the same `home.nix` (catppuccin mocha/blue, xdg.mimeApps defaults, all app+program modules enabled); differences are in `configuration.nix`.
+## 5. Module Development Patterns
 
-Common to both: GRUB+EFI, TZ `Asia/Ho_Chi_Minh`, hostname `nixos`, user `tai` (shell fish), pipewire+pulse, printing (cups), bluetooth, `libinput`, `upower`, `xdg-desktop-portal-gnome`, NetworkManager, `nix-command`+`flakes`, fonts (noto cjk, ubuntu, caskaydia-cove + jetbrains-mono nerdfonts), state version `26.05`. Modules enabled on both: `modules.nixos.service.{keyd,sddm}`, `modules.nixos.program.{fcitx5,waydroid,steam}`.
+### Module Auto-Discovery (Zero `default.nix`)
+- **Automatic Loading**: All `.nix` files under `modules/nixos/` and `modules/home-manager/` are discovered automatically via `scanModules` in `flake.nix`.
+- **NO `default.nix`**: Never create `default.nix` files inside `modules/`. Simply place any new `<name>.nix` file in the appropriate directory.
+- **NO relative imports**: Never import `../../modules/...` in host configurations or module files. Host configurations declare option values; the modules are imported centrally by `flake.nix`.
 
-- **asus-tuf** (FA506NC) — **primary/actively used machine**; build/test with `nh os switch` here by default. Imports nixos-hardware `asus-fa506nc`; NVIDIA (modesetting, powerManagement, nvidiaPersistenced), `acpi_backlight=native`, `services.asusd` (charge limit 80%, profile linked to power), `/mnt/Storage` NTFS, `modules.nixos.program.localsend`; also enables system-level catppuccin module (mocha+blue, autoEnable).
-- **acer-aspire** (Intel): **no longer used** — kept for reference/backup only; do not rely on it. GRUB+EFI, `power-profiles-daemon`, swap, NTFS `/mnt/games`, Intel microcode, `kvm-intel`.
+### Home-Manager Modules (`modules/home-manager/`)
+- **Location**: `modules/home-manager/<category>/<name>.nix`
+  - Categories: `app/`, `programs/`, `desktop/` (and subdirectories like `desktop/shell/`).
+- **Namespace**: `modules.home.<category>.<name>`.
+- **Standard Template**:
+  ```nix
+  { config, lib, pkgs, self, ... }:
+  let
+    cfg = config.modules.home.<category>.<name>;
+  in
+  {
+    options.modules.home.<category>.<name> = {
+      enable = lib.mkEnableOption "Enable <name> configuration";
+    };
 
-## Home-Manager Modules
+    config = lib.mkIf cfg.enable {
+      # Package definitions, xdg config files, program settings
+    };
+  }
+  ```
+- **Auto-Chains**:
+  - `modules.home.programs.fish.enable` automatically enables `fzf`, `zoxide`, `yazi`, and `nix-index`.
+  - `modules.home.desktop.niri.enable` automatically enables `desktop.shell.noctalia`.
 
-`modules/home-manager/default.nix` imports `./app ./programs ./desktop`. Option namespace: `modules.home.*`. One module per file under the category dirs; hosts enable them declaratively in `hosts/*/home.nix`. The module inventory is **not** enumerated here — discover it by globbing `modules/home-manager/*/*.nix` (e.g. `programs/*.nix`, `app/*.nix`, `desktop/**/*.nix`).
+### NixOS Modules (`modules/nixos/`)
+- **Location**: `modules/nixos/<category>/<name>.nix`
+  - Categories: `program/`, `service/`.
+- **Namespace**: `modules.nixos.<category>.<name>`.
+- **Specialisation Pattern**:
+  - For heavy or optional hardware/software profiles (e.g. Steam gaming), use the NixOS specialisation pattern:
+    ```nix
+    options.modules.nixos.program.steam.useSpecialisation = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = "Isolate into a separate boot entry via specialisation.";
+    };
+    ```
 
-Pattern: `options.modules.home.programs.<name>.enable = lib.mkEnableOption ...` → `config = lib.mkIf cfg.enable { ... }`. Modules that configure an app keep its dotfiles in `config/<app>/` and source them via `self + "/config/<app>/..."`.
+---
 
-## NixOS Modules
+## 6. Helper Scripts (`scripts/`)
 
-`modules/nixos/default.nix` imports `./program ./service`. Option namespace: `modules.nixos.*`. One module per file; discover by globbing `modules/nixos/*/*.nix`.
+- Helper scripts reside in `scripts/<name>.sh`.
+- Package definitions reside in `scripts/default.nix` (`pkgs: { ... }`).
+- **Multi-Architecture Support**:
+  - `flake.nix` automatically builds packages for all supported architectures (`x86_64-linux`, `aarch64-linux`, and `aarch64-darwin` for Apple Silicon Mac) via `forAllSystems`.
+  - `self.overlays.default` injects all scripts cleanly into `pkgs.myScripts.*` to avoid namespace collisions with upstream Nixpkgs packages.
+- **Adding a new script**:
+  1. Add `scripts/<name>.sh`.
+  2. Add entry in `scripts/default.nix` using `pkgs.writeShellApplication` with explicit `runtimeInputs`.
+  3. `flake.nix` does NOT need modification!
+  4. In host packages, reference as `myScripts.<name>` from `pkgs` (e.g., `myScripts.note`, `myScripts.rcc`).
 
-Pattern: `options.modules.nixos.<category>.<name>.enable = lib.mkEnableOption ...` → `config = lib.mkIf cfg.enable { ... }`.
+---
 
-## Scripts
+## 7. Code Formatting & Tooling Guidelines
 
-Each helper is `scripts/<name>.sh`, wrapped as `packages.${system}.<name>` in `flake.nix` via `writeShellApplication`. Discover by globbing `scripts/*.sh`; details live inside each script (usage/help in the header).
+Always adhere to the repo's established linters and formatters:
+- **Nix**: Format using `nixfmt`. Keep modules modular, concise, and single-purpose.
+- **Lua**: Format using `stylua` (2 spaces indentation, single quotes).
+- **Python**: Format using `black` (`--line-length 120`).
+- **C / C++**: Format using `clang-format` (settings in `config/nvim/external/clang-format`).
+- **Shell**: Bash with strict error handling (`set -euo pipefail` where applicable).
 
-## Conventions
+---
 
-- Hosts enable modules declaratively (e.g. `modules.home.programs.fish.enable = true;` in `hosts/*/home.nix`).
-- Username `tai`, home `/home/tai`, state version `26.05`.
-- Theme: Catppuccin Mocha (accent blue) — home level both hosts, system level only `asus-tuf`.
-- Format Nix with nixfmt; keep modules small and single-purpose.
-- `flake.lock` updates don't need their own commit — bundle the lockfile bump with whatever commit changes the config that depends on it (e.g. a new package in `home.nix`), rather than committing `flake.lock` alone.
+## 8. Git & Commit Guidelines
+
+- **Convention**: Conventional Commits specification.
+  - Types: `feat:`, `fix:`, `chore:`, `refactor:`, `docs:`, `style:`.
+  - Format: `<type>: <short lowercase imperative description>`
+  - Examples from repository history:
+    - `feat: add antigravity ide integration`
+    - `fix: update fcitx5 trigger key and wayland support`
+    - `refactor: move qbittorrent from home-manager to system packages`
+    - `chore: update flake inputs`
+- **Identity**:
+  - Name: `taitapcode`
+  - Email: `79250948+taitapcode@users.noreply.github.com`
+  - Branch: `main`
+- **Security & Cleanliness**:
+  - Never commit credentials, SSH keys, VPN secrets, or private tokens.
+  - Do not add ad-hoc ignore rules to global `.gitignore` unless truly project-wide.
+
+---
+
+## 9. Verification Checklist Before Completing Any Task
+
+1. [ ] **Syntax & Evaluation**: Run `nix flake check` or `nix eval .#nixosConfigurations.asus-tuf.config.system.build.toplevel.drvPath`.
+2. [ ] **Module Discovery**: Ensure any newly created module is a `.nix` file placed under `modules/home-manager/` or `modules/nixos/` (automatically scanned, no `default.nix` needed).
+3. [ ] **Path References**: Verify no hardcoded local paths (`/home/tai/...`) exist in Nix files; only `self` references used.
+4. [ ] **No System Mutations**: Confirm no `nh os switch` or `nixos-rebuild` commands were executed.
+5. [ ] **Formatting**: Ensure files are formatted with `nixfmt`, `stylua`, or relevant formatters.
