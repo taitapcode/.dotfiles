@@ -1,6 +1,7 @@
 {
   pkgs,
   inputs,
+  self,
   ...
 }:
 
@@ -12,6 +13,9 @@
   home.username = "tai";
   home.homeDirectory = "/home/tai";
   home.stateVersion = "26.05";
+
+  home.file.".face".source = "${self}/assets/profile.jpg";
+  home.file.".face.icon".source = "${self}/assets/profile.jpg";
 
   home.pointerCursor = {
     enable = true;

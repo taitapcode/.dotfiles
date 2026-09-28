@@ -222,7 +222,7 @@
   modules.nixos = {
     service = {
       keyd.enable = true;
-      sddm.enable = true;
+      noctalia-greeter.enable = true;
     };
     program = {
       fcitx5.enable = true;

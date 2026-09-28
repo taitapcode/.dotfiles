@@ -235,6 +235,9 @@ in
         shell = {
           avatar_path = "${self}/assets/profile.jpg";
           corner_radius_scale = 1.6;
+          greeter_sync = {
+            auto_sync = true;
+          };
           lang = "en";
           niri_overview_type_to_launch_enabled = true;
           password_style = "random";
