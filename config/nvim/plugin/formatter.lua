@@ -16,7 +16,7 @@ require('conform').setup({
       },
     },
     black = {
-      prepend_args = { '--line-length', '100' },
+      prepend_args = { '--line-length', '120' },
     },
     stylua = {
       prepend_args = {

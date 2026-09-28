@@ -4,7 +4,7 @@ EnumerateSkipFirst=False
 ModifierOnlyKeyTimeout=250
 
 [Hotkey/TriggerKeys]
-0=Super+Z
+0=Super+A
 1=Zenkaku_Hankaku
 2=Hangul
 

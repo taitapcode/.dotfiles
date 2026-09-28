@@ -1,5 +1,5 @@
 -- Paste without replacing your clipboard with the deleted text
-MAP('x', '<leader>p', [["_dP]], { desc = 'Paste (Black hole)' })
+MAP('x', '<leader>p', [["_dP]], { desc = 'Paste without replacing your clipboard with the deleted text' })
 
 -- Delete without yanking
 MAP('n', 'x', [["_x]])
