@@ -15,7 +15,7 @@ in
       settings = {
         user = {
           name = "taitapcode";
-          email = "79250948+taitapcode@users.noreply.github.com";
+          email = "hoangductai2007@gmail.com";
         };
         init.defaultBranch = "main";
         pull.rebase = true;

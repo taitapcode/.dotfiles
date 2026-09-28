@@ -191,7 +191,7 @@ Always adhere to the repo's established linters and formatters:
     - `chore: update flake inputs`
 - **Identity**:
   - Name: `taitapcode`
-  - Email: `79250948+taitapcode@users.noreply.github.com`
+  - Email: `hoangductai2007@gmail.com`
   - Branch: `main`
 - **Security & Cleanliness**:
   - Never commit credentials, SSH keys, VPN secrets, or private tokens.

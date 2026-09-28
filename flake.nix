@@ -66,17 +66,15 @@
 
       scanModules =
         path:
-        builtins.filter
-          (p: baseNameOf p != "default.nix" && nixpkgs.lib.hasSuffix ".nix" (toString p))
-          (nixpkgs.lib.filesystem.listFilesRecursive path);
+        builtins.filter (p: baseNameOf p != "default.nix" && nixpkgs.lib.hasSuffix ".nix" (toString p)) (
+          nixpkgs.lib.filesystem.listFilesRecursive path
+        );
 
       nixosModulesList = scanModules ./modules/nixos;
       homeModulesList = scanModules ./modules/home-manager;
     in
     {
-      packages = forAllSystems (
-        system: import ./scripts nixpkgs.legacyPackages.${system}
-      );
+      packages = forAllSystems (system: import ./scripts nixpkgs.legacyPackages.${system});
 
       overlays.default = final: prev: {
         myScripts = import ./scripts final;
@@ -92,7 +90,8 @@
               nixpkgs.overlays = [ self.overlays.default ];
               home-manager.users.tai.imports = homeModulesList;
             }
-          ] ++ nixosModulesList;
+          ]
+          ++ nixosModulesList;
         };
         asus-tuf = nixpkgs.lib.nixosSystem {
           specialArgs = { inherit inputs self; };
@@ -104,7 +103,8 @@
               nixpkgs.overlays = [ self.overlays.default ];
               home-manager.users.tai.imports = homeModulesList;
             }
-          ] ++ nixosModulesList;
+          ]
+          ++ nixosModulesList;
         };
       };
     };
