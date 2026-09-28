@@ -148,6 +148,10 @@ binds {
   Mod+V { spawn "noctalia" "msg" "panel-toggle" "clipboard"; }
   Mod+Comma { spawn "noctalia" "msg" "settings-toggle"; }
 
+  // Lock screen via Noctalia
+  Ctrl+Alt+L { spawn "noctalia" "msg" "session" "lock"; }
+  Mod+Alt+L  { spawn "noctalia" "msg" "session" "lock"; }
+
   // Audio & Media control via Noctalia
   XF86AudioRaiseVolume allow-when-locked=true { spawn "noctalia" "msg" "volume-up"; }
   XF86AudioLowerVolume allow-when-locked=true { spawn "noctalia" "msg" "volume-down"; }
@@ -295,3 +299,8 @@ binds {
   Mod+Delete { spawn "systemctl" "poweroff";}
   Mod+Insert { spawn "systemctl" "reboot"; }
 }
+
+switch-events {
+  lid-close { spawn "noctalia" "msg" "session" "lock"; }
+}
+

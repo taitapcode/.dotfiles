@@ -74,6 +74,7 @@ in
             "zen-beta"
             "org.gnome.Nautilus"
             "vesktop"
+            "antigravity"
             "org.pwmt.zathura"
             "anki"
             "helium"
@@ -87,6 +88,140 @@ in
         };
 
         location.address = "Ho Chi Minh City, Vietnam";
+
+        lockscreen = {
+          blur_intensity = 0.1;
+          tint_intensity = 0.1;
+        };
+
+        lockscreen_widgets = {
+          enabled = true;
+          schema_version = 2;
+          widget_order = [
+            "lockscreen-widget-0000000000000003"
+            "lockscreen-widget-0000000000000001"
+            "lockscreen-login-box"
+            "lockscreen-widget-0000000000000002"
+            "lockscreen-widget-0000000000000004"
+          ];
+
+          grid = {
+            cell_size = 16;
+            major_interval = 4;
+            visible = true;
+          };
+
+          widget = {
+            "lockscreen-login-box" = {
+              box_height = 128.0;
+              box_width = 810.0;
+              cx = 960.0;
+              cy = 908.0;
+              output = "eDP-1";
+              placement_height = 1080.0;
+              placement_width = 1920.0;
+              rotation = 0.0;
+              type = "login_box";
+              settings = {
+                background_color = "surface_variant";
+                background_opacity = 0.88;
+                background_radius = 12.0;
+                center_password_text = false;
+                input_opacity = 1.0;
+                input_radius = 6.0;
+                layout = "regular";
+                show_caps_lock = true;
+                show_keyboard_layout = true;
+                show_login_button = true;
+                show_media = false;
+                show_session_buttons = true;
+                show_unlock_hint = false;
+                show_weather = false;
+              };
+            };
+
+            "lockscreen-widget-0000000000000001" = {
+              box_height = 208.0;
+              box_width = 464.0;
+              cx = 960.0;
+              cy = 212.0;
+              output = "eDP-1";
+              placement_height = 1080.0;
+              placement_width = 1920.0;
+              rotation = 0.0;
+              type = "clock";
+              settings = {
+                background = false;
+                background_opacity = 0.0;
+                background_padding = 16;
+                background_radius = 0;
+                clock_style = "digital";
+                font_family = "JetBrainsMono Nerd Font";
+                format = "{:%H:%M}";
+                shadow = true;
+              };
+            };
+
+            "lockscreen-widget-0000000000000002" = {
+              box_height = 32.0;
+              box_width = 368.0;
+              cx = 960.0;
+              cy = 300.0;
+              output = "eDP-1";
+              placement_height = 1080.0;
+              placement_width = 1920.0;
+              rotation = 0.0;
+              type = "clock";
+              settings = {
+                background = false;
+                background_opacity = 0.0;
+                background_padding = 16;
+                background_radius = 0;
+                clock_style = "digital";
+                font_family = "";
+                format = "{:%A, %d/%m/%Y}";
+                shadow = true;
+                timezone = "";
+              };
+            };
+
+            "lockscreen-widget-0000000000000003" = {
+              box_height = 224.0;
+              box_width = 848.0;
+              cx = 960.0;
+              cy = 212.0;
+              output = "eDP-1";
+              placement_height = 1080.0;
+              placement_width = 1920.0;
+              rotation = 0.0;
+              type = "audio_visualizer";
+              settings = {
+                background = false;
+                bands = 24;
+                centered = true;
+                color_2 = "secondary";
+                reversed = false;
+                show_when_idle = false;
+              };
+            };
+
+            "lockscreen-widget-0000000000000004" = {
+              box_height = 128.0;
+              box_width = 304.0;
+              cx = 160.0;
+              cy = 1004.0;
+              output = "eDP-1";
+              placement_height = 1080.0;
+              placement_width = 1920.0;
+              rotation = 0.0;
+              type = "media_player";
+              settings = {
+                hide_when_no_media = true;
+                layout = "horizontal";
+              };
+            };
+          };
+        };
 
         notification = {
           history_retention_hours = 3;
@@ -102,6 +237,7 @@ in
           corner_radius_scale = 1.6;
           lang = "en";
           niri_overview_type_to_launch_enabled = true;
+          password_style = "random";
           screen_time_enabled = true;
           settings_show_advanced = true;
           show_location = true;
