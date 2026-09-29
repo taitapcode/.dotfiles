@@ -100,7 +100,9 @@ in
           widget_order = [
             "lockscreen-widget-0000000000000003"
             "lockscreen-widget-0000000000000001"
-            "lockscreen-login-box"
+            "lockscreen-login-box@HDMI-A-1"
+            "lockscreen-login-box@DP-9"
+            "lockscreen-login-box@eDP-1"
             "lockscreen-widget-0000000000000002"
             "lockscreen-widget-0000000000000004"
           ];
@@ -112,11 +114,67 @@ in
           };
 
           widget = {
-            "lockscreen-login-box" = {
-              box_height = 128.0;
+            "lockscreen-login-box@DP-9" = {
+              box_height = 196.0;
               box_width = 810.0;
+              cx = 1280.0;
+              cy = 1258.0;
+              output = "DP-9";
+              placement_height = 1440.0;
+              placement_width = 2560.0;
+              rotation = 0.0;
+              type = "login_box";
+              settings = {
+                background_color = "surface_variant";
+                background_opacity = 0.88;
+                background_radius = 12.0;
+                center_password_text = false;
+                input_opacity = 1.0;
+                input_radius = 6.0;
+                layout = "regular";
+                show_caps_lock = true;
+                show_keyboard_layout = true;
+                show_login_button = true;
+                show_media = true;
+                show_session_buttons = true;
+                show_unlock_hint = true;
+                show_weather = true;
+              };
+            };
+
+            "lockscreen-login-box@HDMI-A-1" = {
+              box_height = 196.0;
+              box_width = 810.0;
+              cx = 1280.0;
+              cy = 1197.3333740234375;
+              output = "HDMI-A-1";
+              placement_height = 1440.0;
+              placement_width = 2560.0;
+              rotation = 0.0;
+              type = "login_box";
+              settings = {
+                background_color = "surface_variant";
+                background_opacity = 0.88;
+                background_radius = 12.0;
+                center_password_text = false;
+                input_opacity = 1.0;
+                input_radius = 6.0;
+                layout = "regular";
+                show_caps_lock = true;
+                show_keyboard_layout = true;
+                show_login_button = true;
+                show_media = true;
+                show_session_buttons = true;
+                show_unlock_hint = true;
+                show_weather = true;
+              };
+            };
+
+            "lockscreen-login-box@eDP-1" = {
+              box_height = 128.0;
+              box_width = 720.0;
               cx = 960.0;
-              cy = 908.0;
+              cy = 844.0;
               output = "eDP-1";
               placement_height = 1080.0;
               placement_width = 1920.0;
@@ -126,7 +184,7 @@ in
                 background_color = "surface_variant";
                 background_opacity = 0.88;
                 background_radius = 12.0;
-                center_password_text = false;
+                center_password_text = true;
                 input_opacity = 1.0;
                 input_radius = 6.0;
                 layout = "regular";
@@ -206,16 +264,17 @@ in
             };
 
             "lockscreen-widget-0000000000000004" = {
-              box_height = 128.0;
-              box_width = 304.0;
-              cx = 160.0;
-              cy = 1004.0;
+              box_height = 144.0;
+              box_width = 336.0;
+              cx = 176.0;
+              cy = 996.0;
               output = "eDP-1";
               placement_height = 1080.0;
               placement_width = 1920.0;
               rotation = 0.0;
               type = "media_player";
               settings = {
+                background = true;
                 hide_when_no_media = true;
                 layout = "horizontal";
               };
@@ -224,7 +283,7 @@ in
         };
 
         notification = {
-          history_retention_hours = 3;
+          history_retention_hours = 1;
           position = "top_center";
         };
 
@@ -263,6 +322,10 @@ in
           };
 
           screenshot.confirm_region = true;
+
+          window_switcher = {
+            mru = true;
+          };
         };
 
         theme = {
