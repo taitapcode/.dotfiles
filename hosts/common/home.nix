@@ -67,13 +67,6 @@
 
   xdg.mimeApps.enable = true;
   xdg.mimeApps.defaultApplications = {
-    "x-scheme-handler/http" = "zen-beta.desktop";
-    "x-scheme-handler/https" = "zen-beta.desktop";
-    "text/html" = "zen-beta.desktop";
-
-    "application/pdf" = "org.pwmt.zathura.desktop";
-    "application/epub+zip" = "org.pwmt.zathura.desktop";
-
     "application/msword" = "libreoffice-writer.desktop";
     "application/vnd.openxmlformats-officedocument.wordprocessingml.document" =
       "libreoffice-writer.desktop";
@@ -115,23 +108,15 @@
 
   modules.home = {
     programs = {
-      fish.enable = true;
       fcitx5.enable = true;
       git.enable = true;
       neovim.enable = true;
       tmux.enable = true;
-      opencode.enable = true;
       nh.enable = true;
-      eza.enable = true;
-      bat.enable = true;
     };
     app = {
-      zen-browser.enable = true;
-      ghostty.enable = true;
       vesktop.enable = true;
       mpv.enable = true;
-      anki.enable = true;
-      zathura.enable = true;
     };
   };
 }
