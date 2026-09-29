@@ -1,0 +1,17 @@
+---
+description: Generate conventional commit message(s) from staged diff
+---
+
+Generate conventional commit message(s) from the staged git diff.
+
+Rules:
+- If nothing is staged, run `git add -A` first, then proceed
+- Prefix: feat, fix, chore, refactor, docs, test, ci, perf, style
+- All text lowercase (e.g. "feat: add login page")
+- Subject line under 72 characters
+- No period at the end
+- If the diff covers multiple unrelated changes, split into separate commits
+- Each commit should be atomic and self-contained
+- After writing the commit message, stage and commit with `git commit -m "<message>"`
+
+$ARGUMENTS
