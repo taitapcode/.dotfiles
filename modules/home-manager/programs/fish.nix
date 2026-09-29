@@ -124,9 +124,9 @@ in
       interactiveShellInit = ''
         fish_vi_key_bindings
 
-        set -Ux fifc_editor nvim
-        set -Ux fifc_fd_opts --hidden --exclude .git --exclude node_modules --exclude .venv
-        set -Ux fifc_bat_opts --style=numbers
+        set -gx fifc_editor nvim
+        set -gx fifc_fd_opts --hidden --exclude .git --exclude node_modules --exclude .venv
+        set -gx fifc_bat_opts --style=numbers
       '';
     };
   };

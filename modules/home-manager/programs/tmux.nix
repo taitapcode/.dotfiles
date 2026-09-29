@@ -1,5 +1,4 @@
 {
-  self,
   config,
   lib,
   pkgs,
@@ -12,7 +11,7 @@ in
   options.modules.home.programs.tmux.enable = lib.mkEnableOption "Enable Tmux configuration";
 
   config = lib.mkIf cfg.enable {
-    home.packages = [ self.packages.${pkgs.stdenv.hostPlatform.system}.note ];
+    home.packages = [ pkgs.myScripts.note ];
     programs.tmux = {
       enable = true;
       escapeTime = 0;

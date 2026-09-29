@@ -1,30 +1,14 @@
 {
-  pkgs,
-  inputs,
-  self,
   ...
 }:
 
 {
   imports = [
+    ../common/core.nix
     ./hardware.nix
   ];
 
-  boot.loader.grub.enable = true;
-  boot.loader.grub.efiSupport = true;
-  boot.loader.grub.device = "nodev";
-  boot.loader.efi.canTouchEfiVariables = true;
-
-  time.timeZone = "Asia/Ho_Chi_Minh";
-  i18n.defaultLocale = "en_US.UTF-8";
-
-  networking.hostName = "nixos";
-  networking.networkmanager.enable = true;
-
-  hardware.bluetooth.enable = true;
-
   services.power-profiles-daemon.enable = true;
-  services.upower.enable = true;
 
   fileSystems."/mnt/games" = {
     device = "/dev/disk/by-uuid/88B408DEB408D09C";
@@ -39,109 +23,13 @@
     ];
   };
 
-  environment.systemPackages = with pkgs; [
-    wget
-    curl
-
-  ];
-
-  fonts = {
-    enableDefaultPackages = true;
-    packages = with pkgs; [
-      ubuntu-classic
-      liberation_ttf
-      noto-fonts
-      noto-fonts-cjk-sans
-      noto-fonts-cjk-serif
-      noto-fonts-color-emoji
-      nerd-fonts.caskaydia-cove
-      nerd-fonts.jetbrains-mono
-    ];
-
-    fontconfig = {
-      defaultFonts = {
-        serif = [
-          "Noto Serif"
-          "Liberation Serif"
-          "Times New Roman"
-        ];
-        sansSerif = [
-          "Ubuntu"
-          "Noto Sans"
-          "Arial"
-        ];
-        monospace = [
-          "CaskaydiaCove Nerd Font"
-          "JetBrainsMono Nerd Font"
-        ];
-      };
-    };
-  };
-
-  # Define user
-  users.users.tai = {
-    isNormalUser = true;
-    extraGroups = [
-      "wheel"
-      "networkmanager"
-      "video"
-    ];
-
-    shell = pkgs.fish;
-    packages = with pkgs; [
-      nautilus
-      peazip
-      libreoffice
-      btop
-      loupe
-
-      myScripts.note
-    ];
-  };
-
-  home-manager = {
-    useGlobalPkgs = true;
-    useUserPackages = true;
-    extraSpecialArgs = { inherit inputs self; };
-    users.tai = import ./home.nix;
-    backupFileExtension = "backup";
-  };
-
-  security.rtkit.enable = true;
-
-  xdg.portal = {
-    enable = true;
-    extraPortals = with pkgs; [
-      xdg-desktop-portal-gnome
-    ];
-    config.common = {
-      "org.freedesktop.impl.portal.ScreenCast" = [ "gnome" ];
-      "org.freedesktop.impl.portal.Screenshot" = [ "gnome" ];
-    };
-  };
-
-  # Enable CUPS to print documents.
-  services.printing.enable = true;
-
-  # Enable sound.
-  services.pipewire = {
-    enable = true;
-    pulse.enable = true;
-  };
-
-  # Enable touchpad support (enabled default in most desktopManager).
-  services.libinput.enable = true;
-
-  # Allow proprietary/unfree packages to be installed
-  nixpkgs.config.allowUnfree = true;
-
   # Programs
   programs = {
+    fish.enable = true;
     niri = {
       enable = true;
       useNautilus = true;
     };
-    fish.enable = true;
   };
 
   modules.nixos = {
@@ -159,10 +47,5 @@
   # Ensure hardware acceleration / graphics drivers are active
   hardware.graphics.enable = true;
 
-  nix.settings.experimental-features = [
-    "nix-command"
-    "flakes"
-  ];
-
-  system.stateVersion = "26.05";
+  home-manager.users.tai = import ./home.nix;
 }
