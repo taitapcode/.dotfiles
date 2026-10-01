@@ -52,7 +52,7 @@ The repository defines two NixOS host configurations (`nixosConfigurations`):
 
 ### Flake Inputs
 - `nixpkgs`: Pinned to `github:nixos/nixpkgs/nixos-unstable`.
-- **Consistency Rule**: All flake inputs must follow `nixpkgs` (`inputs.nixpkgs.follows = "nixpkgs"`) to avoid duplicate package closures in the Nix store (e.g., `catppuccin`, `nixos-hardware`, `home-manager`, `zen-browser`, `fcitx5-lotus`, `helium-flake`, `nix-index-database`, `antigravity-nix`).
+- **Consistency Rule**: All flake inputs must follow `nixpkgs` (`inputs.nixpkgs.follows = "nixpkgs"`) to avoid duplicate package closures in the Nix store (e.g., `catppuccin`, `nixos-hardware`, `home-manager`, `zen-browser`, `helium-flake`, `nix-index-database`, `antigravity-nix`).
 - **Zen Browser**: Flake input follows both `nixpkgs` and `home-manager`.
 - **Noctalia Shell**: Packaged directly via `pkgs.noctalia` in Nixpkgs; configured through Home Manager's built-in `programs.noctalia` module (no standalone flake input required).
 

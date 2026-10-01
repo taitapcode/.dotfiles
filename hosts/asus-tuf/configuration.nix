@@ -102,7 +102,10 @@
       noctalia-greeter.enable = true;
     };
     program = {
-      fcitx5.enable = true;
+      fcitx5 = {
+        enable = true;
+        users = [ "tai" ];
+      };
       waydroid.enable = true;
       steam = {
         enable = true;
@@ -116,7 +119,7 @@
     gnumake
     cmake
     gcc
-    bun
+    nodejs
     uv
     mars-mips
   ];

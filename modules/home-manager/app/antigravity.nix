@@ -15,7 +15,7 @@ let
     nativeBuildInputs = [ pkgs.makeWrapper ];
     postBuild = ''
       wrapProgram $out/bin/antigravity \
-        --add-flags "--enable-wayland-ime --wayland-text-input-version=3"
+        --add-flags "--ozone-platform-hint=auto --enable-features=UseOzonePlatform,WaylandWindowDecorations --enable-wayland-ime --wayland-text-input-version=3"
     '';
     meta = (antigravityPkg.meta or { }) // {
       mainProgram = "antigravity";
