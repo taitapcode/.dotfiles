@@ -92,6 +92,11 @@ in
         lockscreen = {
           blur_intensity = 0.1;
           tint_intensity = 0.1;
+          transition = [
+            "disc"
+            "stripes"
+            "wipe"
+          ];
         };
 
         lockscreen_widgets = {
@@ -285,10 +290,18 @@ in
         };
 
         wallpaper = {
-          directory = wallpaperPath;
-          transition_on_startup = true;
           default.path = defaultWallpaper;
+          directory = wallpaperPath;
           last.path = defaultWallpaper;
+          monitors.eDP-1.path = defaultWallpaper;
+          transition = [
+            "disc"
+            "stripes"
+            "wipe"
+            "zoom"
+          ];
+          transition_duration = 1000;
+          transition_on_startup = true;
         };
 
         widget = {
