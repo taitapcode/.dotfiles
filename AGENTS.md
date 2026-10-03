@@ -10,9 +10,11 @@ Declarative NixOS configuration managed as a Nix flake with Home Manager, built 
   - **NEVER** run `nh os build`, `nh os switch`, `nixos-rebuild`, `home-manager switch`, `systemctl`, `reboot`, or `poweroff`.
   - **NEVER** run any command that modifies system state or user environment directly.
 - **Dry Verification Only**:
-  - Always verify changes via pure evaluation before declaring tasks complete:
-    - Flake evaluation check: `nix flake check`
-    - Target host evaluation: `nix eval .#nixosConfigurations.asus-tuf.config.system.build.toplevel.drvPath`
+  - Verify changes safely before declaring tasks complete:
+    - **Nix files modified** (`*.nix`, flake inputs, modules, host configs): Run pure evaluation:
+      - Flake check: `nix flake check`
+      - Or target host evaluation: `nix eval .#nixosConfigurations.asus-tuf.config.system.build.toplevel.drvPath`
+    - **Non-Nix files modified** (raw configs under `config/`, assets, static text files): **Skip `nix eval`**. Run app-specific linters/validators if available (e.g., `niri validate`, `stylua`).
   - Rebuilding or switching is reserved exclusively for the user.
 - **Working Tree Integrity**:
   - Never discard uncommitted changes (`git restore`, `git checkout --`) without explicit user permission. Always inspect `git status` and `git diff` first.
@@ -201,7 +203,7 @@ Always adhere to the repo's established linters and formatters:
 
 ## 9. Verification Checklist Before Completing Any Task
 
-1. [ ] **Syntax & Evaluation**: Run `nix flake check` or `nix eval .#nixosConfigurations.asus-tuf.config.system.build.toplevel.drvPath`.
+1. [ ] **Syntax & Evaluation**: If any `.nix` files or flake inputs were modified, verify with `nix flake check` or `nix eval .#nixosConfigurations.asus-tuf.config.system.build.toplevel.drvPath`. For non-Nix config changes under `config/`, skip Nix evaluation and use app-specific linters/validators if applicable.
 2. [ ] **Module Discovery**: Ensure any newly created module is a `.nix` file placed under `modules/home-manager/` or `modules/nixos/` (automatically scanned, no `default.nix` needed).
 3. [ ] **Path References**: Verify no hardcoded local paths (`/home/tai/...`) exist in Nix files; only `self` references used.
 4. [ ] **No System Mutations**: Confirm no `nh os switch` or `nixos-rebuild` commands were executed.
