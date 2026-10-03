@@ -34,6 +34,20 @@ vim.api.nvim_create_autocmd('VimEnter', {
   end,
 })
 
+-- When gaining focus: If in Normal mode, switch to the default (US) layout
+vim.api.nvim_create_autocmd('FocusGained', {
+  group = fcitx_group,
+  callback = function()
+    local mode = vim.api.nvim_get_mode().mode
+    if mode:sub(1, 1) == 'n' then
+      local current = get_current_layout()
+      if current ~= default_layout then
+        set_layout(default_layout)
+      end
+    end
+  end,
+})
+
 -- When leaving Insert mode: Save the exact current layout and switch back to default layout
 vim.api.nvim_create_autocmd('InsertLeave', {
   group = fcitx_group,
