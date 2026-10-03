@@ -12,6 +12,15 @@ in
   options.modules.home.programs.fcitx5.enable = lib.mkEnableOption "Enable Fcitx5 configuration";
 
   config = lib.mkIf cfg.enable {
-    xdg.configFile."fcitx5".source = self + "/config/fcitx5";
+    # Symlink individual files instead of the whole directory.
+    # Fcitx5 needs write access to ~/.config/fcitx5/ for runtime state
+    # (active IM persistence, user dictionary, crash logs, etc.).
+    # A whole-directory symlink into the read-only Nix store breaks this.
+    xdg.configFile = {
+      "fcitx5/config".source = self + "/config/fcitx5/config";
+      "fcitx5/profile".source = self + "/config/fcitx5/profile";
+      "fcitx5/conf/classicui.conf".source = self + "/config/fcitx5/conf/classicui.conf";
+      "fcitx5/conf/notifications.conf".source = self + "/config/fcitx5/conf/notifications.conf";
+    };
   };
 }
