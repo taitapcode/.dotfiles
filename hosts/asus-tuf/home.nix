@@ -29,11 +29,11 @@
     };
 
     battery-limit-restore = {
-      name = "Battery Limit (60%)";
+      name = "Battery Limit (70%)";
       genericName = "Battery Charge Limit";
-      comment = "Restore battery charge limit to 60%";
+      comment = "Restore battery charge limit to 70%";
       icon = "${self}/assets/icons/battery-limit.svg";
-      exec = "${pkgs.myScripts.battery}/bin/battery 60";
+      exec = "${pkgs.myScripts.battery}/bin/battery 70";
       terminal = false;
       categories = [ "Settings" ];
       settings = {

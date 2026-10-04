@@ -31,7 +31,7 @@ The repository defines two NixOS host configurations (`nixosConfigurations`):
 - **Hardware Integration**:
   - Uses `nixos-hardware.nixosModules.asus-fa506nc`.
   - NVIDIA settings: `modesetting.enable = true`, `powerManagement.enable = true`, `nvidiaPersistenced = true`.
-  - Power / Battery daemon: `services.asusd` (charge limit 80%, automated profiles on AC / battery).
+  - Power / Battery daemon: `services.asusd` (charge limit 70%, automated profiles on AC / battery).
 - **Filesystems & Services**:
   - Storage: NTFS partition mounted at `/mnt/Storage` (`ntfs3`).
   - Network: Cloudflare WARP VPN service (`services.cloudflare-warp.enable = true`).

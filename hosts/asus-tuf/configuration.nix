@@ -35,8 +35,8 @@
     enable = true;
     asusdConfig.text = ''
       (
-        charge_control_end_threshold: 60,
-        base_charge_control_end_threshold: 60,
+        charge_control_end_threshold: 70,
+        base_charge_control_end_threshold: 70,
         disable_nvidia_powerd_on_battery: true,
         ac_command: "",
         bat_command: "",

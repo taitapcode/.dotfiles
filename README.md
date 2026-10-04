@@ -34,7 +34,7 @@ The desktop is centered around **[Niri](https://github.com/YaLTeR/niri)** — an
 - **⚡ Zero-Boilerplate Module Discovery**: Flake architecture automatically scans and imports all NixOS and Home Manager modules recursively (`scanModules`), eliminating repetitive `default.nix` import lists.
 - **🔋 ASUS Hardware & Battery Longevity**:
   - Integrated `asusd` power daemon for automated AC/DC platform profiles.
-  - Custom `battery` CLI utility and `.desktop` shortcuts supporting threshold limiting (60% health limit) and travel one-shot charging (100% oneshot mode).
+  - Custom `battery` CLI utility and `.desktop` shortcuts supporting threshold limiting (70% health limit) and travel one-shot charging (100% oneshot mode).
 - **🎮 Isolated Gaming Specialisation**: High-performance Steam and Gamescope configuration isolated into a dedicated `gaming` boot specialisation to keep the primary profile lean.
 - **⌨️ Keyboard & Input Comfort**:
   - Hardware-level `Caps Lock` ⇄ `Esc` swap managed by `keyd`.
@@ -92,7 +92,7 @@ The desktop is centered around **[Niri](https://github.com/YaLTeR/niri)** — an
 | `Mod + V` | Open Clipboard History |
 | `Mod + ,` | Open Noctalia Settings |
 | `Mod + Alt + L` / `Ctrl + Alt + L` | Lock Screen |
-| `Mod + Shift + B` | Toggle Battery Limit (60% longevity ⇄ 100% oneshot) |
+| `Mod + Shift + B` | Toggle Battery Limit (70% longevity ⇄ 100% oneshot) |
 | `Mod + Shift + /` | Show Niri Hotkey Overlay |
 
 ### Applications
@@ -126,9 +126,9 @@ Packaged as standalone flakes executables with strict runtime dependency sandbox
 Manage ASUS battery charge thresholds via `asusctl` with desktop notifications:
 ```bash
 battery status          # Show current charge limit and battery stats
-battery 60              # Set limit to 60% (optimal for battery health on AC)
+battery 70              # Set limit to 70% (optimal for battery health on AC)
 battery oneshot         # One-shot charge to 100% for travel
-battery toggle          # Toggle between 60% and 100% oneshot
+battery toggle          # Toggle between 70% and 100% oneshot
 ```
 
 ### 2. `note` — Git-Backed Markdown Notes

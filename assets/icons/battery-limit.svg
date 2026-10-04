@@ -9,8 +9,8 @@
     <!-- Battery terminal tip -->
     <path d="M48 28 C49.5 28, 50 29, 50 30 L50 34 C50 35, 49.5 36, 48 36" fill="none" stroke="#89b4fa" stroke-width="2.5" stroke-linecap="round"/>
 
-    <!-- 60% charge fill -->
-    <rect x="15" y="25" width="17" height="14" rx="2" ry="2" fill="#89b4fa" opacity="0.45"/>
+    <!-- 70% charge fill -->
+    <rect x="15" y="25" width="20" height="14" rx="2" ry="2" fill="#89b4fa" opacity="0.45"/>
 
     <!-- Security Shield: centered vertically at y=32, tip cleanly covers bottom battery border (y=44) -->
     <path d="M29 20 L38 23 C38 33, 33 40, 29 44 C25 40, 20 33, 20 23 Z" fill="#94e2d5" stroke="#181825" stroke-width="1.8" stroke-linejoin="round"/>
