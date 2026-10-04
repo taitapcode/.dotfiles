@@ -7,7 +7,7 @@
 let
   cfg = config.modules.home.desktop.shell.noctalia;
   wallpaperPath = "${self}/assets/wallpapers";
-  defaultWallpaper = "${wallpaperPath}/3.png";
+  defaultWallpaper = "${wallpaperPath}/1.png";
 in
 {
   options.modules.home.desktop.shell.noctalia.enable =

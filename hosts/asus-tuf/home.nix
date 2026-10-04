@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, self, ... }:
 
 {
   imports = [
@@ -19,7 +19,7 @@
       name = "Battery Full Charge (100%)";
       genericName = "Battery Charge Limit";
       comment = "One-shot full charge to 100% for travel";
-      icon = "battery-full-charging";
+      icon = "${self}/assets/icons/battery-full.svg";
       exec = "${pkgs.myScripts.battery}/bin/battery oneshot";
       terminal = false;
       categories = [ "Settings" ];
@@ -32,7 +32,7 @@
       name = "Battery Limit (60%)";
       genericName = "Battery Charge Limit";
       comment = "Restore battery charge limit to 60%";
-      icon = "battery-060";
+      icon = "${self}/assets/icons/battery-limit.svg";
       exec = "${pkgs.myScripts.battery}/bin/battery 60";
       terminal = false;
       categories = [ "Settings" ];
