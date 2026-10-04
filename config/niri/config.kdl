@@ -138,6 +138,7 @@ binds {
 
   Mod+Return hotkey-overlay-title="Open a terminal" { spawn "ghostty"; }
   Mod+B hotkey-overlay-title="Run a browser" { spawn "zen-beta"; }
+  Mod+Shift+B hotkey-overlay-title="Toggle battery limit" { spawn "battery" "toggle"; }
   Mod+E hotkey-overlay-title="Run a file explorer" { spawn "nautilus"; }
 
   // Open menus via Noctalia

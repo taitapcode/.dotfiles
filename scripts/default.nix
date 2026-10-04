@@ -16,4 +16,19 @@ pkgs: {
     ];
     text = builtins.readFile ./rcc.sh;
   };
+
+  battery = pkgs.writeShellApplication {
+    name = "battery";
+    runtimeInputs =
+      with pkgs;
+      [
+        libnotify
+        coreutils
+        gnugrep
+      ]
+      ++ pkgs.lib.optionals pkgs.stdenv.hostPlatform.isLinux [
+        asusctl
+      ];
+    text = builtins.readFile ./battery.sh;
+  };
 }

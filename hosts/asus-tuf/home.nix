@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, ... }:
 
 {
   imports = [
@@ -12,6 +12,34 @@
 
     "application/pdf" = "org.pwmt.zathura.desktop";
     "application/epub+zip" = "org.pwmt.zathura.desktop";
+  };
+
+  xdg.desktopEntries = {
+    battery-oneshot = {
+      name = "Battery Full Charge (100%)";
+      genericName = "Battery Charge Limit";
+      comment = "One-shot full charge to 100% for travel";
+      icon = "battery-full-charging";
+      exec = "${pkgs.myScripts.battery}/bin/battery oneshot";
+      terminal = false;
+      categories = [ "Settings" ];
+      settings = {
+        Keywords = "battery;charge;power;asus;oneshot;full;";
+      };
+    };
+
+    battery-limit-restore = {
+      name = "Battery Limit (60%)";
+      genericName = "Battery Charge Limit";
+      comment = "Restore battery charge limit to 60%";
+      icon = "battery-060";
+      exec = "${pkgs.myScripts.battery}/bin/battery 60";
+      terminal = false;
+      categories = [ "Settings" ];
+      settings = {
+        Keywords = "battery;charge;power;asus;limit;restore;";
+      };
+    };
   };
 
   modules.home = {
