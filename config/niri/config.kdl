@@ -74,8 +74,7 @@ cursor {
   xcursor-size 24
 }
 
-// Add lines like this to spawn processes at startup.
-spawn-at-startup "fcitx5" "-d" "--replace"
+
 
 
 hotkey-overlay {
