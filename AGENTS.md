@@ -140,10 +140,10 @@ Both lists are appended to every `nixosConfigurations.<host>.modules`, and `home
 │   └── acer-aspire/         # configuration.nix + hardware.nix + home.nix  (LEGACY)
 ├── modules/
 │   ├── home-manager/
-│   │   ├── app/             # anki, antigravity, ghostty, helium, hermes-desktop, mpv, obs, vesktop, zathura, zen-browser
+│   │   ├── app/             # anki, antigravity, ghostty, helium, mpv, obs, vesktop, zathura, zen-browser
 │   │   ├── desktop/         # niri.nix
 │   │   │   └── shell/       # noctalia.nix
-│   │   └── programs/        # bat, eza, fcitx5, fish, fzf, git, kanshi, nh, nix-index, nvim, opencode, tmux, yazi, zoxide
+│   │   └── programs/        # bat, eza, fcitx5, fish, fzf, git, hermes, kanshi, nh, nix-index, nvim, opencode, tmux, yazi, zoxide
 │   └── nixos/
 │       ├── program/         # fcitx5, localsend, steam, waydroid
 │       └── service/         # keyd, noctalia-greeter, sddm

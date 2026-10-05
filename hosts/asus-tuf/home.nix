@@ -68,6 +68,7 @@
           }
         ];
       };
+      hermes.enable = true;
     };
     app = {
       zen-browser.enable = true;
@@ -77,7 +78,6 @@
       helium.enable = true;
       obs.enable = true;
       antigravity.enable = true;
-      hermes-desktop.enable = true;
     };
     desktop.niri.enable = true;
   };
