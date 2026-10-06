@@ -8,6 +8,7 @@
 {
   imports = [
     inputs.catppuccin.homeModules.catppuccin
+    inputs.sops-nix.homeManagerModules.sops
   ];
 
   home.username = "tai";

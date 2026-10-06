@@ -1,0 +1,7 @@
+keys:
+  - &tai age1yy3nehm2vtk3czmaw8qv5kwlpz00ml9ecdympwzjen4cdk75292qpxpvnm
+creation_rules:
+  - path_regex: secrets/.*\.ya?ml$
+    key_groups:
+      - age:
+          - *tai

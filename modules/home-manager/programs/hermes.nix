@@ -18,5 +18,11 @@ in
     home.packages = [
       inputs.hermes-agent.packages.${system}.default
     ];
+
+    sops = lib.mkIf config.modules.home.programs.sops.enable {
+      secrets."hermes-env" = {
+        path = "${config.home.homeDirectory}/.hermes/.env";
+      };
+    };
   };
 }
