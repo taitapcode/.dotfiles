@@ -90,7 +90,8 @@ The repository defines two NixOS host configurations (`nixosConfigurations`), bo
 | `helium-flake` | `github:oxcl/nix-flake-helium-browser` | follows `nixpkgs` |
 | `nix-index-database` | `github:nix-community/nix-index-database` | follows `nixpkgs` |
 | `antigravity-nix` | `github:jacopone/antigravity-nix` | follows `nixpkgs` |
-| `hermes-agent` | `github:NousResearch/hermes-agent` | follows `nixpkgs` **and** `home-manager` |
+| `hermes-agent` | `github:NousResearch/hermes-agent` | follows `nixpkgs` **and** `home-manager`; ships the upstream Home Manager module consumed by `programs/hermes.nix` |
+| `sops-nix` | `github:Mic92/sops-nix` | follows `nixpkgs`; supplies `homeManagerModules.sops` + `nixosModules.sops` (see section 5) |
 
 - **Consistency Rule (hard)**: every new input MUST declare `inputs.nixpkgs.follows = "nixpkgs"` (and `home-manager.follows = "home-manager"` if it consumes Home Manager) to avoid duplicate package closures in the Nix store.
 - **Noctalia** is *not* a flake input: it comes from `pkgs.noctalia`, configured through the upstream NixOS/Home-Manager `noctalia` modules.
@@ -147,7 +148,8 @@ Both lists are appended to every `nixosConfigurations.<host>.modules`, and `home
 │   └── nixos/
 │       ├── program/         # fcitx5, localsend, steam, waydroid
 │       └── service/         # keyd, noctalia-greeter, sddm
-└── scripts/                 # default.nix + battery.sh, note.sh, rcc.sh
+├── scripts/                 # default.nix + battery.sh, note.sh, rcc.sh
+└── secrets/                 # secrets.yaml — sops/age-encrypted (see section 5)
 ```
 
 ### Path Resolution Rules
@@ -247,6 +249,25 @@ config = lib.mkIf cfg.enable (
   ]
 );
 ```
+
+### Upstream module + declarative managed config (Hermes)
+
+`modules/home-manager/programs/hermes.nix` is a thin wrapper: it does **not** define the options itself, it imports the upstream Home Manager module shipped by the `hermes-agent` flake input.
+
+```nix
+imports = [ inputs.hermes-agent.homeManagerModules.default ];
+```
+
+- The input owns `programs.hermes-agent` (the CLI on `PATH` + `HERMES_HOME`) and `services.hermes-agent` (declarative `config.yaml`).
+- `services.hermes-agent.settings` is **deep-merged** into `~/.hermes/config.yaml` on every switch: keys Nix declares always **win**, keys it does not declare (`_config_version`, onboarding state, runtime-written keys) are **preserved**.
+- Enabling it writes `~/.hermes/.managed`, after which the CLI **refuses** `hermes config set|edit` and `hermes setup`, pointing at `home-manager switch`. **Change Hermes configuration in `hermes.nix`, never with the CLI.**
+- DeepSeek is text-only, so `auxiliary.vision` routes image/OCR work to Gemini. Every config key lives in `settings` — keep them there, do not edit `~/.hermes/config.yaml` by hand.
+
+### Sops secrets (`secrets/`, `modules.home.programs.sops`)
+
+`sops-nix` is wired from both sides: `inputs.sops-nix.nixosModules.sops` in `hosts/common/core.nix` and `inputs.sops-nix.homeManagerModules.sops` in `hosts/common/home.nix`. `modules/home-manager/programs/sops.nix` sets `defaultSopsFile = self + "/secrets/secrets.yaml"` (age-encrypted, key at `~/.config/sops/age/keys.txt`) and exports `SOPS_AGE_KEY_FILE`.
+
+Consumers declare `sops.secrets."<name>"` guarded by `config.modules.home.programs.sops.enable` — e.g. Hermes pulls `sops.secrets."hermes-env"` out to `~/.hermes/.env`. **Never commit plaintext secrets or age keys**; add new secrets to `secrets/secrets.yaml` with `sops` and reference the same key name from the consumer module.
 
 ### Auto-chains (do not duplicate work)
 

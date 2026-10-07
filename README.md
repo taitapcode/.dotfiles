@@ -44,6 +44,8 @@ The desktop is centered around **[Niri](https://github.com/YaLTeR/niri)** — an
   - **Fish Shell** with vi mode, contextual git prompt, `fifc`, and fast CLI navigators (`fzf`, `zoxide`, `yazi`, `eza`, `bat`).
   - **Neovim** configured modularly in Lua (`blink-cmp`, `snacks.nvim`, Treesitter, LSPs, formatters, and snippets).
   - **Google Antigravity IDE** wrapped with Wayland Ozone and IME acceleration.
+  - **Hermes Agent** CLI configured declaratively through its upstream Home Manager module (no `hermes config set` — see below).
+- **🔐 Encrypted Secrets at Rest**: API keys and tokens managed with [sops-nix](https://github.com/Mic92/sops-nix) + **age**, committed only in ciphertext (`secrets/secrets.yaml`).
 
 ---
 
@@ -73,7 +75,7 @@ The desktop is centered around **[Niri](https://github.com/YaLTeR/niri)** — an
 - **CLI Utilities**: `eza` (modern ls), `bat` (cat with syntax highlighting), `yazi` (file manager), `zoxide` (smart cd), `fzf`, `ripgrep`, `lazygit`, `btop`, `nix-index`
 
 ### Applications & Productivity
-- **Development**: Modular Neovim, Antigravity IDE, Opencode
+- **Development**: Modular Neovim, Antigravity IDE, Opencode, Hermes Agent CLI (declaratively managed)
 - **Web Browsers**: [Zen Browser](https://zen-browser.app/) (Beta), [Helium Browser](https://github.com/oxcl/nix-flake-helium-browser)
 - **Documents & Media**: Zathura (PDF/EPUB), Loupe (Images), MPV (Audio/Video), LibreOffice
 - **Communication & Social**: Vesktop (Discord with Vencord plugins), LocalSend
@@ -152,6 +154,30 @@ rcc main.c              # Compiles with gcc -std=c11 -O2 -Wall -Wextra, runs, an
 
 ---
 
+## 🤖 Hermes Agent
+
+The [Hermes Agent](https://github.com/NousResearch/hermes-agent) CLI is managed **declaratively** through the upstream Home Manager module shipped by the `hermes-agent` flake input — `modules/home-manager/programs/hermes.nix` is a thin wrapper that only imports it:
+
+```nix
+imports = [ inputs.hermes-agent.homeManagerModules.default ];
+```
+
+- The input owns `programs.hermes-agent` (CLI on `PATH` + `HERMES_HOME`) and `services.hermes-agent` (declarative `config.yaml`).
+- `services.hermes-agent.settings` is deep-merged into `~/.hermes/config.yaml` on every switch: keys Nix declares win, runtime-written keys (`_config_version`, onboarding state) are preserved.
+- Enabling it writes a `~/.hermes/.managed` marker — the CLI then **refuses** `hermes config set|edit` and `hermes setup`, pointing at `home-manager switch`. Edit `hermes.nix`, never the CLI.
+- The default model is `deepseek-flash`; since DeepSeek is text-only, `auxiliary.vision` routes image/OCR work to Gemini.
+- Built-in memory (`memory.memory_enabled` / `user_profile_enabled`) is declared in `settings` too. It ships on by default but the *Blank Slate* setup preset writes both flags off, so the module pins them on.
+
+## 🔐 Secrets (sops-nix)
+
+Secrets are encrypted at rest with [sops-nix](https://github.com/Mic92/sops-nix) + **age**, stored in `secrets/secrets.yaml` (age key at `~/.config/sops/age/keys.txt`).
+
+- Wired from both sides: `sops-nix.nixosModules.sops` (`hosts/common/core.nix`) and `sops-nix.homeManagerModules.sops` (`hosts/common/home.nix`).
+- Consumers declare `sops.secrets."<name>"` guarded by `modules.home.programs.sops.enable`; e.g. the `hermes-env` secret is rendered to `~/.hermes/.env`.
+- Never commit plaintext secrets or age keys.
+
+---
+
 ## 📂 Repository Structure
 
 ```
@@ -168,11 +194,12 @@ rcc main.c              # Compiles with gcc -std=c11 -O2 -Wall -Wextra, runs, an
 │   ├── home-manager/        # User-level modules (auto-discovered)
 │   │   ├── app/             # Desktop applications (Ghostty, Zen, Antigravity, etc.)
 │   │   ├── desktop/         # Niri and Noctalia Shell / Greeter configuration
-│   │   └── programs/        # CLI & user tools (Fish, Neovim, Bat, Eza, Git, Nh)
+│   │   └── programs/        # CLI & user tools (Fish, Neovim, Bat, Eza, Git, Nh, Hermes, Sops)
 │   └── nixos/               # System-level modules (auto-discovered)
 │       ├── program/         # System programs (Steam, Fcitx5, Waydroid, LocalSend)
 │       └── service/         # System services (Keyd, Noctalia Greeter, SDDM)
-└── scripts/                 # Custom shell scripts wrapped as flake packages
+├── scripts/                 # Custom shell scripts wrapped as flake packages
+└── secrets/                 # sops/age-encrypted secrets.yaml
 ```
 
 ---
