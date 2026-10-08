@@ -5,13 +5,9 @@ ModifierOnlyKeyTimeout=250
 
 [Hotkey/TriggerKeys]
 0=Super+space
-1=Control+space
-2=Zenkaku_Hankaku
-3=Hangul
 
 [Hotkey/EnumerateForwardKeys]
 0=Super+space
-1=Control+space
 
 [Hotkey/ActivateKeys]
 0=Hangul_Hanja
