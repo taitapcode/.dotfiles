@@ -99,7 +99,6 @@
     wl-clipboard
     nautilus
     peazip
-    libreoffice
     loupe
     qbittorrent
 
@@ -118,6 +117,7 @@
     app = {
       vesktop.enable = true;
       mpv.enable = true;
+      libreoffice.enable = true;
     };
   };
 }

@@ -30,6 +30,7 @@
     packages = with pkgs; [
       ubuntu-classic
       liberation_ttf
+      corefonts
       noto-fonts
       noto-fonts-cjk-sans
       noto-fonts-cjk-serif
