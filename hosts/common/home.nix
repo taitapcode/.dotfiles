@@ -64,6 +64,7 @@
     accent = "blue";
     gtk.icon.enable = false;
     kvantum.enable = false;
+    lazygit.enable = false;
   };
 
   xdg.mimeApps.enable = true;
