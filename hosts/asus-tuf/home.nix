@@ -39,6 +39,7 @@
       };
       hermes.enable = true;
       sops.enable = true;
+      opencode.enable = true;
     };
     app = {
       zen-browser.enable = true;
