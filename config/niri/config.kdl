@@ -35,6 +35,10 @@ input {
   focus-follows-mouse max-scroll-amount="0%"
 }
 
+// Touchpad toggle: the `touchpad` script writes this file and niri live-reloads it.
+// It holds a comment while the touchpad is on, and `input { touchpad { off } }` when off.
+include optional=true "~/.local/state/niri/touchpad.kdl"
+
 // Settings that influence how windows are positioned and sized.
 layout {
   gaps 5
@@ -164,6 +168,9 @@ binds {
   // Brightness Control via Noctalia
   XF86MonBrightnessUp   allow-when-locked=true { spawn "noctalia" "msg" "brightness-up"; }
   XF86MonBrightnessDown allow-when-locked=true { spawn "noctalia" "msg" "brightness-down"; }
+
+  // Touchpad toggle (Fn+F10) via helper script
+  XF86TouchpadToggle { spawn "touchpad" "toggle"; }
 
   Mod+Tab repeat=false { toggle-overview; }
   Mod+C repeat=false { close-window; }

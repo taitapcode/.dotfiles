@@ -31,4 +31,19 @@ pkgs: {
       ];
     text = builtins.readFile ./battery.sh;
   };
+
+  touchpad = pkgs.writeShellApplication {
+    name = "touchpad";
+    runtimeInputs =
+      with pkgs;
+      [
+        libnotify
+        coreutils
+        gnugrep
+      ]
+      ++ pkgs.lib.optionals pkgs.stdenv.hostPlatform.isLinux [
+        niri
+      ];
+    text = builtins.readFile ./touchpad.sh;
+  };
 }

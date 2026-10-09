@@ -95,6 +95,7 @@ The desktop is centered around **[Niri](https://github.com/YaLTeR/niri)** — an
 | `Mod + ,` | Open Noctalia Settings |
 | `Mod + Alt + L` / `Ctrl + Alt + L` | Lock Screen |
 | `Mod + Shift + B` | Toggle Battery Limit (70% longevity ⇄ 100% oneshot) |
+| `Fn + F10` (`XF86TouchpadToggle`) | Toggle Touchpad off / on (desktop notification) |
 | `Mod + Shift + /` | Show Niri Hotkey Overlay |
 
 ### Applications
@@ -150,6 +151,15 @@ Compile, execute with strict flags, and cleanly remove the generated binary in a
 ```bash
 rcc solution.cpp        # Compiles with g++ -std=c++17 -O2 -Wall -Wextra, runs, and cleans up
 rcc main.c              # Compiles with gcc -std=c11 -O2 -Wall -Wextra, runs, and cleans up
+```
+
+### 4. `touchpad` — Touchpad Toggle
+niri exposes no IPC for input devices, so the toggle rewrites the `off` flag of an included state file (`~/.local/state/niri/touchpad.kdl`) that niri watches and live-reloads, then reports the new state with a desktop notification. Bound to `Fn + F10` (`XF86TouchpadToggle`):
+```bash
+touchpad                # Toggle the touchpad off / on
+touchpad off            # Disable the touchpad
+touchpad on             # Re-enable the touchpad
+touchpad status         # Print the current touchpad state
 ```
 
 ---

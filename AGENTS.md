@@ -148,7 +148,7 @@ Both lists are appended to every `nixosConfigurations.<host>.modules`, and `home
 │   └── nixos/
 │       ├── program/         # fcitx5, localsend, steam, waydroid
 │       └── service/         # keyd, noctalia-greeter, sddm
-├── scripts/                 # default.nix + battery.sh, note.sh, rcc.sh
+├── scripts/                 # default.nix + battery.sh, note.sh, rcc.sh, touchpad.sh
 └── secrets/                 # secrets.yaml — sops/age-encrypted (see section 5)
 ```
 
@@ -275,6 +275,18 @@ Consumers declare `sops.secrets."<name>"` guarded by `config.modules.home.progra
 - `modules.home.programs.fish.enable` ⇒ also enables `fzf`, `zoxide`, `yazi`, `nix-index`.
 - `modules.home.desktop.niri.enable` ⇒ also enables `modules.home.desktop.shell.noctalia` and sets the Wayland session variables.
 
+### Niri runtime state via `include` (`config/niri/config.kdl`)
+
+`~/.config/niri` is a store symlink (`xdg.configFile."niri".source = self + "/config/niri"`), so nothing can edit `config.kdl` at runtime. Anything niri has to change live therefore lives in a writable file that `config.kdl` pulls in:
+
+```kdl
+include optional=true "~/.local/state/niri/touchpad.kdl"
+```
+
+- `include` works **only at the top level** (26.04 supports `optional=true` and `~` expansion); the included file is watched, so writing it live-reloads the config.
+- `input.touchpad` is a **non-merging** section, so the included block replaces the whole touchpad section — keep the included file down to the `off` flag and let the main config keep `tap` / `natural-scroll`.
+- Writer: `scripts/touchpad.sh` (`pkgs.myScripts.touchpad`), installed by `modules/home-manager/desktop/niri.nix` and bound to `XF86TouchpadToggle` (Fn+F10, confirmed via `/sys/class/input/*/capabilities/key`).
+
 ### Where to enable a new module
 
 Both host `home.nix` (Home Manager modules) and `configuration.nix` (NixOS modules) declare values in a single `modules = { ... }` block. `asus-tuf` is the host that must be updated; touch `acer-aspire` only if the change is genuinely shared.
@@ -293,6 +305,7 @@ Registered scripts:
 | `note.sh` | `git`, `neovim`, `coreutils` | `pkgs.myScripts.note` |
 | `rcc.sh` | `gcc` | `pkgs.myScripts.rcc` |
 | `battery.sh` | `libnotify`, `coreutils`, `gnugrep` + `asusctl` (Linux only) | `pkgs.myScripts.battery` |
+| `touchpad.sh` | `libnotify`, `coreutils`, `gnugrep` + `niri` (Linux only) | `pkgs.myScripts.touchpad` |
 
 ### Adding a new script
 
