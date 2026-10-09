@@ -1,5 +1,3 @@
-{ pkgs, self, ... }:
-
 {
   imports = [
     ../common/home.nix
@@ -12,34 +10,6 @@
 
     "application/pdf" = "org.pwmt.zathura.desktop";
     "application/epub+zip" = "org.pwmt.zathura.desktop";
-  };
-
-  xdg.desktopEntries = {
-    battery-oneshot = {
-      name = "Battery Full Charge (100%)";
-      genericName = "Battery Charge Limit";
-      comment = "One-shot full charge to 100% for travel";
-      icon = "${self}/assets/icons/battery-full.svg";
-      exec = "${pkgs.myScripts.battery}/bin/battery oneshot";
-      terminal = false;
-      categories = [ "Settings" ];
-      settings = {
-        Keywords = "battery;charge;power;asus;oneshot;full;";
-      };
-    };
-
-    battery-limit-restore = {
-      name = "Battery Limit (70%)";
-      genericName = "Battery Charge Limit";
-      comment = "Restore battery charge limit to 70%";
-      icon = "${self}/assets/icons/battery-limit.svg";
-      exec = "${pkgs.myScripts.battery}/bin/battery 70";
-      terminal = false;
-      categories = [ "Settings" ];
-      settings = {
-        Keywords = "battery;charge;power;asus;limit;restore;";
-      };
-    };
   };
 
   modules.home = {
