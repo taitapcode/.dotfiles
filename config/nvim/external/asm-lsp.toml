@@ -2,6 +2,6 @@
 assembler = "mars"
 instruction_set = "mips"
 
-[opts]
+[default_config.opts]
 diagnostics = false
 default_diagnostics = false
