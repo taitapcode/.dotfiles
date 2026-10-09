@@ -11,6 +11,17 @@ vim.lsp.enable({
   'gdscript',
   'copilot',
   'asm_lsp',
+  'texlab',
+})
+
+vim.lsp.config('texlab', {
+  settings = {
+    texlab = {
+      build = {
+        onSave = false, -- Handled by VimTeX
+      },
+    },
+  },
 })
 
 vim.lsp.config('nixd', {

@@ -48,6 +48,11 @@ in
           nixd
           copilot-language-server
           asm-lsp
+          texlab
+
+          # LaTeX
+          tectonic
+          neovim-remote
 
           # Formatter
           stylua
@@ -60,6 +65,10 @@ in
           blink-copilot
           nvim-lspconfig
           nvim-treesitter.withAllGrammars
+          {
+            plugin = vimtex;
+            config = loadPluginConfig "vimtex";
+          }
 
           {
             plugin = autoclose-nvim;

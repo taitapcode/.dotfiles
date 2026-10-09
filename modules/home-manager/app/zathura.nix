@@ -16,6 +16,13 @@ in
         # Direct clipboard integration (saves you from manually running :copy)
         selection-clipboard = "clipboard";
 
+        # SyncTeX inverse search (Ctrl + Click to jump to Neovim)
+        synctex = true;
+        synctex-editor-command = "nvr --remote-silent +%{line} %{input}";
+
+        # Default to light/normal mode on launch (press <Tab> to toggle dark mode)
+        recolor = false;
+
         # Better scrolling behavior
         scroll-page-step = "0.5"; # Scroll half a page at a time with space/page-down
         scroll-full-step = "1.0";
