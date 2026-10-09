@@ -15,7 +15,6 @@
   modules.home = {
     programs = {
       fish.enable = true;
-      opencode.enable = true;
       eza.enable = true;
       bat.enable = true;
       nix-index.enable = true;
