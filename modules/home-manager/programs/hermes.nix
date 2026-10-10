@@ -38,34 +38,18 @@ in
     services.hermes-agent = {
       enable = true;
 
-      # Catalog plugins, pinned to the sha published in
-      # https://hermes-agent.nousresearch.com/docs/api/plugin-catalog.json .
-      # `name` is mandatory: fetchFromGitHub is otherwise named "source", which
-      # both collides across entries (asserted) and names the symlink
-      # nix-managed-source. Each package lands in ~/.hermes/plugins as
-      # nix-managed-<name> and still needs its key in settings.plugins.enabled.
-      extraPlugins = [
-        (pkgs.fetchFromGitHub {
-          name = "anysearch";
-          owner = "vollegrewar";
-          repo = "hermes-plugin-anysearch";
-          rev = "43c1757a5d12d4d7adb4e74326c99182f4957b6f";
-          hash = "sha256-Aj/GG+beauiokshbD2g3YivLP81otOOuomHdzgz8cNU=";
-        })
-        (pkgs.fetchFromGitHub {
-          name = "diff-review";
-          owner = "sprmn24";
-          repo = "hermes-plugin-diff-review";
-          rev = "f238271c1f63ac59b43b99290ec6143f50b780f3";
-          hash = "sha256-obiH3ON/WGZ1JcU+uIAF8NX/PywU3Y0jBMMKHaA02Ak=";
-        })
-      ];
-
       settings = {
         model = {
-          default = "deepseek-flash";
-          provider = "deepseek";
+          default = "mimo-v2.6-flash";
+          provider = "xiaomi";
         };
+
+        fallback_providers = [
+          {
+            provider = "deepseek";
+            model = "deepseek-flash";
+          }
+        ];
 
         # Allowlist of toolsets that load for the CLI. Keep sorted.
         platform_toolsets.cli = [
@@ -87,18 +71,29 @@ in
           user_profile_enabled = true;
         };
 
-        # DeepSeek is text-only; route image/OCR work to Gemini.
-        auxiliary.vision = {
-          provider = "gemini";
-          model = "gemini-3.6-flash";
+        # MiMo is multimodal, so vision stays on the same provider/key instead of
+        # Gemini. Revert to gemini/gemini-3.6-flash if MiMo vision misbehaves
+        auxiliary = {
+          vision = {
+            provider = "xiaomi";
+            model = "mimo-v2.5";
+          };
+
+          # High-frequency, low-stakes calls: MiMo Flash tier (0.14/0.28 per M).
+          # Every other aux slot is "auto" and inherits the main model.
+          title_generation = {
+            provider = "xiaomi";
+            model = "mimo-v2.6-flash";
+          };
+          memory_query_rewrite = {
+            provider = "xiaomi";
+            model = "mimo-v2.6-flash";
+          };
         };
 
-        # Bundled hook plugins plus the catalog plugins fetched above. Keep
-        # sorted. A key here is what makes a non-bundled plugin load; the
-        # extraPlugins symlink alone is inert.
+        # Bundled hook plugins. Keep sorted. A key here is what makes a
+        # non-bundled plugin load; an extraPlugins symlink alone is inert.
         plugins.enabled = [
-          "anysearch"
-          "diff-review"
           "disk-cleanup"
           "security-guidance"
         ];
