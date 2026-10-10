@@ -45,6 +45,7 @@ in
             "block-lan"
             # Malware / Multipurpose 2/2
             "urlhaus-1"
+            "curben-phishing"
             "plowe-0"
             "dpollock-0"
             # Cookie notices 4/4
@@ -63,6 +64,7 @@ in
             "easylist-notifications"
             "fanboy-ai-suggestions"
             "adguard-popup-overlays"
+            "adguard-mobile-app-banners"
             "adguard-other-annoyances"
             "adguard-widgets"
             "ublock-annoyances"
