@@ -220,9 +220,9 @@ in
                 isEssential = true;
                 container = 1;
               };
-              "Facebook" = {
+              "Deepseek" = {
                 id = "3757ac88-55f5-4466-8111-18b6458cde11";
-                url = "https://facebook.com";
+                url = "https://chat.deepseek.com/";
                 position = 107;
                 isEssential = true;
                 container = 1;
