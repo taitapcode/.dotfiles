@@ -162,6 +162,15 @@ in
       secrets."hermes-env" = {
         path = "${config.home.homeDirectory}/.hermes/.env";
       };
+      secrets."google-client-secret" = {
+        path = "${config.home.homeDirectory}/.hermes/google_client_secret.json";
+      };
+      # google_api.py rewrites this file on every access-token refresh, so it
+      # must not be the default read-only 0400.
+      secrets."google-token" = {
+        path = "${config.home.homeDirectory}/.hermes/google_token.json";
+        mode = "0600";
+      };
     };
   };
 }
