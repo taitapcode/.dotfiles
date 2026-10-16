@@ -43,7 +43,6 @@ The desktop is centered around **[Niri](https://github.com/YaLTeR/niri)** — an
   - **Ghostty** with native Wayland blur and fast GPU acceleration.
   - **Fish Shell** with vi mode, contextual git prompt, `fifc`, and fast CLI navigators (`fzf`, `zoxide`, `yazi`, `eza`, `bat`).
   - **Neovim** configured modularly in Lua (`blink-cmp`, `snacks.nvim`, Treesitter, LSPs, formatters, and snippets).
-  - **Google Antigravity IDE** wrapped with Wayland Ozone and IME acceleration.
   - **Hermes Agent** CLI configured declaratively through its upstream Home Manager module (no `hermes config set` — see below).
 - **🔐 Encrypted Secrets at Rest**: API keys and tokens managed with [sops-nix](https://github.com/Mic92/sops-nix) + **age**, committed only in ciphertext (`secrets/secrets.yaml`).
 
@@ -75,7 +74,7 @@ The desktop is centered around **[Niri](https://github.com/YaLTeR/niri)** — an
 - **CLI Utilities**: `eza` (modern ls), `bat` (cat with syntax highlighting), `yazi` (file manager), `zoxide` (smart cd), `fzf`, `ripgrep`, `lazygit`, `btop`, `nix-index`
 
 ### Applications & Productivity
-- **Development**: Modular Neovim, Antigravity IDE, Opencode, Hermes Agent CLI (declaratively managed)
+- **Development**: Modular Neovim, Opencode, Hermes Agent CLI (declaratively managed)
 - **Web Browsers**: [Zen Browser](https://zen-browser.app/) (Beta), [Helium Browser](https://github.com/oxcl/nix-flake-helium-browser)
 - **Documents & Media**: Zathura (PDF/EPUB), Loupe (Images), MPV (Audio/Video), LibreOffice
 - **Communication & Social**: Vesktop (Discord with Vencord plugins), LocalSend
@@ -202,7 +201,7 @@ Secrets are encrypted at rest with [sops-nix](https://github.com/Mic92/sops-nix)
 ├── hosts/                   # Machine profiles
 ├── modules/
 │   ├── home-manager/        # User-level modules (auto-discovered)
-│   │   ├── app/             # Desktop applications (Ghostty, Zen, Antigravity, etc.)
+│   │   ├── app/             # Desktop applications (Ghostty, Zen, etc.)
 │   │   ├── desktop/         # Niri and Noctalia Shell / Greeter configuration
 │   │   └── programs/        # CLI & user tools (Fish, Neovim, Bat, Eza, Git, Nh, Hermes, Sops)
 │   └── nixos/               # System-level modules (auto-discovered)

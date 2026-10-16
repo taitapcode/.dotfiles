@@ -76,7 +76,6 @@ in
             "vesktop"
             "org.pwmt.zathura"
             "anki"
-            "antigravity"
             "helium"
             "writer"
             "impress"

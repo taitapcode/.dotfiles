@@ -89,7 +89,6 @@ The repository defines two NixOS host configurations (`nixosConfigurations`), bo
 | `zen-browser` | `github:0xc000022070/zen-browser-flake` | follows `nixpkgs` **and** `home-manager` |
 | `helium-flake` | `github:oxcl/nix-flake-helium-browser` | follows `nixpkgs` |
 | `nix-index-database` | `github:nix-community/nix-index-database` | follows `nixpkgs` |
-| `antigravity-nix` | `github:jacopone/antigravity-nix` | follows `nixpkgs` |
 | `hermes-agent` | `github:NousResearch/hermes-agent` | follows `nixpkgs` **and** `home-manager`; ships the upstream Home Manager module consumed by `programs/hermes.nix` |
 | `sops-nix` | `github:Mic92/sops-nix` | follows `nixpkgs`; supplies `homeManagerModules.sops` + `nixosModules.sops` (see section 5) |
 
@@ -141,7 +140,7 @@ Both lists are appended to every `nixosConfigurations.<host>.modules`, and `home
 │   └── acer-aspire/         # configuration.nix + hardware.nix + home.nix  (LEGACY)
 ├── modules/
 │   ├── home-manager/
-│   │   ├── app/             # anki, antigravity, ghostty, helium, mpv, obs, vesktop, zathura, zen-browser
+│   │   ├── app/             # anki, ghostty, helium, mpv, obs, vesktop, zathura, zen-browser
 │   │   ├── desktop/         # niri.nix
 │   │   │   └── shell/       # noctalia.nix
 │   │   └── programs/        # bat, eza, fcitx5, fish, fzf, git, hermes, kanshi, nh, nix-index, nvim, opencode, tmux, yazi, zoxide
