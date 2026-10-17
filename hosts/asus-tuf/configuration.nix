@@ -90,6 +90,10 @@
 
   # Programs
   programs = {
+    appimage = {
+      enable = true;
+      binfmt = true;
+    };
     fish.enable = true;
     niri = {
       enable = true;
@@ -124,6 +128,7 @@
     uv
     mars-mips
     myScripts.battery
+    myScripts.appimage-install
   ];
 
   home-manager.users.tai = import ./home.nix;

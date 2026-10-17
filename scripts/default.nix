@@ -32,6 +32,21 @@ pkgs: {
     text = builtins.readFile ./battery.sh;
   };
 
+  appimage-install = pkgs.writeShellApplication {
+    name = "appimage-install";
+    runtimeInputs = with pkgs; [
+      coreutils
+      desktop-file-utils
+      file
+      findutils
+      gawk
+      gnused
+      libarchive
+      squashfsTools
+    ];
+    text = builtins.readFile ./appimage-install.sh;
+  };
+
   touchpad = pkgs.writeShellApplication {
     name = "touchpad";
     runtimeInputs =
