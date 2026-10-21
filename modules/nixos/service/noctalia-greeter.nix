@@ -25,6 +25,9 @@ in
         name = "Banana";
       };
       settings = {
+        clock = {
+          enabled = false;
+        };
         output = {
           scale = 1.0;
         };
