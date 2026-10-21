@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  pkgs,
   inputs,
   ...
 }:
@@ -58,16 +57,12 @@ in
 
       settings = {
         model = {
-          default = "mimo-v2.6-flash";
-          provider = "xiaomi";
+          default = "deepseek-flash";
+          provider = "deepseek";
         };
 
-        fallback_providers = [
-          {
-            provider = "deepseek";
-            model = "deepseek-flash";
-          }
-        ];
+        # Runtime default is "high"; pin the cheaper tier here.
+        agent.reasoning_effort = "low";
 
         # Allowlist of toolsets that load for the CLI. Keep sorted.
         platform_toolsets.cli = [
@@ -120,25 +115,9 @@ in
           user_profile_enabled = true;
         };
 
-        # MiMo is multimodal, so vision stays on the same provider/key instead of
-        # Gemini. Revert to gemini/gemini-3.6-flash if MiMo vision misbehaves
-        auxiliary = {
-          vision = {
-            provider = "xiaomi";
-            model = "mimo-v2.5";
-          };
-
-          # High-frequency, low-stakes calls: MiMo Flash tier (0.14/0.28 per M).
-          # Every other aux slot is "auto" and inherits the main model.
-          title_generation = {
-            provider = "xiaomi";
-            model = "mimo-v2.6-flash";
-          };
-          memory_query_rewrite = {
-            provider = "xiaomi";
-            model = "mimo-v2.6-flash";
-          };
-        };
+        # No auxiliary overrides: every aux slot stays "auto" and inherits the
+        # main model. deepseek-flash is natively multimodal (V4.1-Flash,
+        # supports_vision=True), so vision rides on the main provider/key.
 
         # Bundled hook plugins. Keep sorted. A key here is what makes a
         # non-bundled plugin load; an extraPlugins symlink alone is inert.
@@ -146,15 +125,6 @@ in
           "disk-cleanup"
           "security-guidance"
         ];
-
-        providers.xiaomi = {
-          api = "https://api.xiaomimimo.com/v1";
-          key_env = "XIAOMI_API_KEY";
-          models = {
-            "mimo-v2.5".prompt_caching = true;
-            "mimo-v2.6-flash".prompt_caching = true;
-          };
-        };
       };
     };
 
