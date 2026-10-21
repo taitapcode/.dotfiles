@@ -20,7 +20,8 @@ vim.o.completeopt = 'menuone,noinsert'
 vim.o.swapfile = false
 vim.o.foldmethod = 'expr'
 vim.o.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
-vim.o.foldenable = false
+vim.o.foldenable = true
+vim.o.foldlevel = 99
 
 vim.opt.undofile = true
 vim.opt.backup = false
