@@ -50,6 +50,8 @@ in
           };
         };
 
+        brightness.sync_all_monitors = true;
+
         control_center = {
           sidebar = "compact";
           sidebar_section = "none";
@@ -58,7 +60,19 @@ in
           };
         };
 
-        desktop_widgets.enabled = false;
+        desktop_widgets = {
+          enabled = false;
+          schema_version = 2;
+          widget_order = [ ];
+
+          grid = {
+            cell_size = 16;
+            major_interval = 4;
+            visible = true;
+          };
+
+          widget = { };
+        };
 
         dock = {
           auto_hide = true;
@@ -256,6 +270,8 @@ in
 
           launcher = {
             categories = false;
+            layout = "simple";
+            search_position = "top";
             providers = {
               emoji = {
                 global = true;
@@ -272,6 +288,8 @@ in
           };
 
           screenshot.confirm_region = true;
+
+          shadow.direction = "down_right";
 
           window_switcher = {
             mru = true;
