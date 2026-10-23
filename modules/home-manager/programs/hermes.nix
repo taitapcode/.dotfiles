@@ -57,8 +57,8 @@ in
 
       settings = {
         model = {
-          default = "deepseek-flash";
-          provider = "deepseek";
+          default = "deepseek-ai/DeepSeek-V4.1-Flash-1017";
+          provider = "deepinfra";
         };
 
         # Runtime default is "high"; pin the cheaper tier here.
