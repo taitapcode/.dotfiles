@@ -20,6 +20,7 @@ in
 
     home.sessionVariables = {
       GDK_BACKEND = "wayland";
+      GSK_RENDERER = "gl";
       MOZ_ENABLE_WAYLAND = "1";
       NIXOS_OZONE_WL = "1";
       QT_QPA_PLATFORMTHEME = "gtk3";
