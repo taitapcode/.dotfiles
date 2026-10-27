@@ -88,6 +88,9 @@
   # Cloudflare Warp VPN
   services.cloudflare-warp.enable = true;
 
+  # Needed for the Nautilus trash view (trash://), volume monitoring and MTP
+  services.gvfs.enable = true;
+
   # Programs
   programs = {
     appimage = {
