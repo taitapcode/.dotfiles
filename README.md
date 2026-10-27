@@ -161,6 +161,16 @@ touchpad on             # Re-enable the touchpad
 touchpad status         # Print the current touchpad state
 ```
 
+### 5. `appimg` — AppImage Installer / Uninstaller
+AppImages installed outside the Nix store: `~/.local/bin/<name>` plus a `.desktop` entry carrying the app's own name and icons unpacked into the hicolor theme (on NixOS the file runs through binfmt → `appimage-run`, so the payload is unsquashed directly):
+```bash
+appimg install file.AppImage      # Copy to ~/.local/bin, write .desktop + icons
+appimg install file.AppImage foo  # Same, command renamed to foo
+appimg list                       # Installed AppImage apps, sizes, orphan caches
+appimg remove -n deckcraft        # Dry run: show what would be deleted
+appimg remove deckcraft           # Delete binary, entry, icons, extraction cache
+```
+
 ---
 
 ## 🤖 Hermes Agent

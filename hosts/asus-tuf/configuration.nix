@@ -128,7 +128,7 @@
     uv
     mars-mips
     myScripts.battery
-    myScripts.appimage-install
+    myScripts.appimg
   ];
 
   home-manager.users.tai = import ./home.nix;

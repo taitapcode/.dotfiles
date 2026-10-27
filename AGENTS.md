@@ -147,7 +147,7 @@ Both lists are appended to every `nixosConfigurations.<host>.modules`, and `home
 │   └── nixos/
 │       ├── program/         # fcitx5, localsend, steam, waydroid
 │       └── service/         # keyd, noctalia-greeter, sddm
-├── scripts/                 # default.nix + battery.sh, note.sh, rcc.sh, touchpad.sh
+├── scripts/                 # default.nix + appimg.sh, battery.sh, note.sh, rcc.sh, touchpad.sh
 └── secrets/                 # secrets.yaml — sops/age-encrypted (see section 5)
 ```
 
@@ -305,6 +305,7 @@ Registered scripts:
 | `rcc.sh` | `gcc` | `pkgs.myScripts.rcc` |
 | `battery.sh` | `libnotify`, `coreutils`, `gnugrep` + `asusctl` (Linux only) | `pkgs.myScripts.battery` |
 | `touchpad.sh` | `libnotify`, `coreutils`, `gnugrep` + `niri` (Linux only) | `pkgs.myScripts.touchpad` |
+| `appimg.sh` | `coreutils`, `desktop-file-utils`, `file`, `findutils`, `gawk`, `gnugrep`, `libarchive`, `squashfsTools` | `pkgs.myScripts.appimg` |
 
 ### Adding a new script
 
