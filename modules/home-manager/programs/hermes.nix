@@ -1,20 +1,19 @@
 {
   config,
   lib,
+  pkgs,
   inputs,
   ...
 }:
 let
   cfg = config.modules.home.programs.hermes;
-  # Hermes's browser: Helium, referenced by store path. Hermes never consults
-  # PATH (resolution: AGENT_BROWSER_EXECUTABLE_PATH > PM's runtime download,
-  # which is FHS-unsafe on NixOS), so the explicit path is what keeps the
-  # browser tool working. `package.override { flags }` is the exact derivation
-  # `programs.helium` puts on PATH (package + its flags) — reusing it means one
-  # browser in the closure instead of two; pkgs.chromium falls out entirely.
-  browserBin = "${
-    config.programs.helium.package.override { inherit (config.programs.helium) flags; }
-  }/bin/helium";
+  # Hermes's browser: stock Chromium from nixpkgs, referenced by store path.
+  # Hermes never consults PATH (resolution: AGENT_BROWSER_EXECUTABLE_PATH >
+  # PM's runtime download, which is FHS-unsafe on NixOS), so the explicit path
+  # is what keeps the browser tool working. Chromium stays out of
+  # home.packages on purpose — the interpolated path already pins it in the
+  # closure, and putting it on PATH would shadow the user's default browser.
+  browserBin = "${pkgs.chromium}/bin/chromium";
 in
 {
   imports = [ inputs.hermes-agent.homeManagerModules.default ];
@@ -30,10 +29,10 @@ in
   config = lib.mkIf cfg.enable {
     programs.hermes-agent.enable = true;
 
-    # Hermes's browser is Helium, not Chromium: pkgs.chromium is out of the
-    # closure entirely (see browserBin above). Both declarations below must
-    # carry the same path — shells read home.sessionVariables, the gateway
-    # unit reads services…environment, and neither inherits the other.
+    # Hermes drives stock pkgs.chromium (see browserBin above), not a second
+    # browser build. Both declarations below must carry the same path — shells
+    # read home.sessionVariables, the gateway unit reads services…environment,
+    # and neither inherits the other.
     home.sessionVariables.AGENT_BROWSER_EXECUTABLE_PATH = browserBin;
 
     # hermes-desktop on PATH + XDG launcher entry. The launcher carries
