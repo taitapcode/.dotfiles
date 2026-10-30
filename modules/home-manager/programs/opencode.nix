@@ -16,6 +16,9 @@ in
     programs.opencode = {
       enable = true;
 
+      # OpenCode rewrites cli.json at runtime, which would clobber the store symlink.
+      mutableSettings = true;
+
       extraPackages = with pkgs; [
         lua-language-server
         fish-lsp
