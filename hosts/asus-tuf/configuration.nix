@@ -10,6 +10,7 @@
   ];
 
   boot.kernelParams = [ "acpi_backlight=native" ];
+  boot.blacklistedKernelModules = [ "tiny_power_button" ];
 
   hardware.nvidia = {
     modesetting.enable = true;
