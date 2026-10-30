@@ -168,8 +168,8 @@ in
           };
         };
 
-        spacesForce = true;
-        pinsForce = true;
+        spacesForce = false;
+        pinsForce = false;
         pinsForceAction = "remove";
         spaces = {
           "Daily" = {
