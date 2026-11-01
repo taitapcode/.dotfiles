@@ -99,7 +99,7 @@
     btop
     wl-clipboard
     nautilus
-    peazip
+    ouch
     loupe
     qbittorrent
 

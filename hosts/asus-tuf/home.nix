@@ -37,7 +37,10 @@
           }
         ];
       };
-      hermes.enable = true;
+      hermes = {
+        enable = true;
+        desktop.enable = true;
+      };
       sops.enable = true;
       opencode.enable = true;
     };
