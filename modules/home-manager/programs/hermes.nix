@@ -107,6 +107,12 @@ in
           "yuanbao"
         ];
 
+        # Voice off. The Desktop renderer derives its voice.enabled flag from
+        # stt.enabled, so this disables the mic button, dictation and voice
+        # chat — the stt/tts entries in agent.disabled_toolsets above only drop
+        # the agent's tools, never that UI. wake_word defaults to off already.
+        stt.enabled = false;
+
         # Built-in persistent memory (MEMORY.md / USER.md). Default is true, but
         # the "Blank Slate" setup preset writes false; pin it on here.
         memory = {
@@ -117,6 +123,16 @@ in
         # No auxiliary overrides: every aux slot stays "auto" and inherits the
         # main model. deepseek-flash is natively multimodal (V4.1-Flash,
         # supports_vision=True), so vision rides on the main provider/key.
+
+        # The flake ships every binary Hermes needs, so PM must never provision
+        # its own: a lazy install recreates ~/.hermes/tools/facts.json, and any
+        # facts file that exists while packages are missing turns the startup
+        # check into "⚠ install out of sync (node; npm; ffmpeg; ripgrep)". No
+        # facts file → pm.drift() returns {} and the line cannot come back.
+        # Explicit `hermes pm install` still works (explicit bypasses this).
+        # This is a config.yaml key, so it lives under `settings` — putting it
+        # directly under `services.hermes-agent` fails as an unknown option.
+        security.allow_lazy_installs = false;
 
         # Bundled hook plugins. Keep sorted. A key here is what makes a
         # non-bundled plugin load; an extraPlugins symlink alone is inert.
