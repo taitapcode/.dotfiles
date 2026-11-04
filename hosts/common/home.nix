@@ -13,7 +13,7 @@
 
   home.username = "tai";
   home.homeDirectory = "/home/${config.home.username}";
-  home.stateVersion = "26.05";
+  home.stateVersion = "26.11";
 
   home.pointerCursor = {
     enable = true;
