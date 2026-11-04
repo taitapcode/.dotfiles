@@ -32,9 +32,6 @@ The desktop is centered around **[Niri](https://github.com/YaLTeR/niri)** — an
 - **📜 Scrollable Tiling Workflow**: Effortless horizontal workspace scaling with Niri, featuring fluid animations, dynamic column sizing, and zero window overlap clutter.
 - **🎨 Unified Aesthetics**: System-wide Catppuccin Mocha (blue accent) theming applied across GTK, Qt, Ghostty, Neovim, Noctalia Shell, Banana cursor, and custom lockscreen visualizers.
 - **⚡ Zero-Boilerplate Module Discovery**: Flake architecture automatically scans and imports all NixOS and Home Manager modules recursively (`scanModules`), eliminating repetitive `default.nix` import lists.
-- **🔋 ASUS Hardware & Battery Longevity**:
-  - Integrated `asusd` power daemon for automated AC/DC platform profiles.
-  - Custom `battery` CLI utility and `.desktop` shortcuts supporting threshold limiting (70% health limit) and travel one-shot charging (100% oneshot mode).
 - **🎮 Isolated Gaming Specialisation**: High-performance Steam and Gamescope configuration isolated into a dedicated `gaming` boot specialisation to keep the primary profile lean.
 - **⌨️ Keyboard & Input Comfort**:
   - Hardware-level `Caps Lock` ⇄ `Esc` swap managed by `keyd`.
@@ -52,7 +49,7 @@ The desktop is centered around **[Niri](https://github.com/YaLTeR/niri)** — an
 
 | Host | Status | Target Hardware | Purpose |
 | :--- | :---: | :--- | :--- |
-| **`asus-tuf`** | **Active (Daily Driver)** | ASUS TUF Gaming A15 (FA506NC)<br/>• AMD Ryzen CPU<br/>• NVIDIA GeForce RTX 3050 (`modesetting`, `nvidiaPersistenced`)<br/>• NTFS3 secondary storage (`/mnt/Storage`) | Primary workstation for development, daily productivity, and gaming. |
+| **`asus-tuf`** | **Active (Daily Driver)** | ASUS TUF Gaming A15 (FA506NC)<br/>• AMD Ryzen CPU<br/>• NVIDIA GeForce RTX 3050 <br/>• NTFS3 secondary storage (`/mnt/Storage`) | Primary workstation for development, daily productivity, and gaming. |
 | **`acer-aspire`** | *Legacy / Backup* | Acer Aspire Laptop | Maintained for flake evaluation compatibility. |
 
 ---
@@ -66,7 +63,6 @@ The desktop is centered around **[Niri](https://github.com/YaLTeR/niri)** — an
 - **Theme**: Catppuccin Mocha (Accent: Blue)
 - **Cursor**: Banana Cursor (`banana-cursor`)
 - **Icons**: Colloid Dark (`colloid-icon-theme`)
-- **Fonts**: `CaskaydiaCove Nerd Font`, `JetBrainsMono Nerd Font`, `Ubuntu`, `Noto Fonts`
 
 ### Terminal & Shell
 - **Terminal Emulator**: [Ghostty](https://ghostty.org/)
@@ -173,30 +169,6 @@ appimg remove deckcraft           # Delete binary, entry, icons, extraction cach
 
 ---
 
-## 🤖 Hermes Agent
-
-The [Hermes Agent](https://github.com/NousResearch/hermes-agent) CLI is managed **declaratively** through the upstream Home Manager module shipped by the `hermes-agent` flake input — `modules/home-manager/programs/hermes.nix` is a thin wrapper that only imports it:
-
-```nix
-imports = [ inputs.hermes-agent.homeManagerModules.default ];
-```
-
-- The input owns `programs.hermes-agent` (CLI on `PATH` + `HERMES_HOME`) and `services.hermes-agent` (declarative `config.yaml`).
-- `services.hermes-agent.settings` is deep-merged into `~/.hermes/config.yaml` on every switch: keys Nix declares win, runtime-written keys (`_config_version`, onboarding state) are preserved.
-- Enabling it writes a `~/.hermes/.managed` marker — the CLI then **refuses** `hermes config set|edit` and `hermes setup`, pointing at `home-manager switch`. Edit `hermes.nix`, never the CLI.
-- The default model is `deepseek-flash`; since DeepSeek is text-only, `auxiliary.vision` routes image/OCR work to Gemini.
-- Built-in memory (`memory.memory_enabled` / `user_profile_enabled`) is declared in `settings` too. It ships on by default but the *Blank Slate* setup preset writes both flags off, so the module pins them on.
-
-## 🔐 Secrets (sops-nix)
-
-Secrets are encrypted at rest with [sops-nix](https://github.com/Mic92/sops-nix) + **age**, stored in `secrets/secrets.yaml` (age key at `~/.config/sops/age/keys.txt`).
-
-- Wired from both sides: `sops-nix.nixosModules.sops` (`hosts/common/core.nix`) and `sops-nix.homeManagerModules.sops` (`hosts/common/home.nix`).
-- Consumers declare `sops.secrets."<name>"` guarded by `modules.home.programs.sops.enable`; e.g. the `hermes-env` secret is rendered to `~/.hermes/.env`.
-- Never commit plaintext secrets or age keys.
-
----
-
 ## 📂 Repository Structure
 
 ```
@@ -219,53 +191,4 @@ Secrets are encrypted at rest with [sops-nix](https://github.com/Mic92/sops-nix)
 │       └── service/         # System services (Keyd, Noctalia Greeter, SDDM)
 ├── scripts/                 # Custom shell scripts wrapped as flake packages
 └── secrets/                 # sops/age-encrypted secrets.yaml
-```
-
----
-
-## 🚀 Getting Started
-
-### Prerequisites
-- NixOS installed with **Flakes** and the **`nix-command`** experimental feature enabled.
-
-### 1. Clone Configuration
-```bash
-git clone https://github.com/taitapcode/.dotfiles.git ~/.dotfiles
-cd ~/.dotfiles
-```
-
-### 2. Verify Flake Evaluation
-Safely verify the flake without making any changes to your running system:
-```bash
-# Check all flake outputs and module syntax
-nix flake check
-
-# Or evaluate the asus-tuf target derivation
-nix eval .#nixosConfigurations.asus-tuf.config.system.build.toplevel.drvPath
-```
-
-### 3. Deploy System Configuration
-This setup integrates [nh](https://github.com/viperML/nh) for simplified NixOS management:
-```bash
-# Build and switch to the asus-tuf profile
-nh os switch -H asus-tuf
-
-# Or using standard nixos-rebuild
-sudo nixos-rebuild switch --flake .#asus-tuf
-```
-
-### 4. Gaming Boot Specialisation
-To boot into the isolated Steam/Gamescope gaming environment:
-- Select the **`gaming`** specialisation from the GRUB boot menu upon startup, or activate it dynamically:
-```bash
-sudo /run/current-system/specialisation/gaming/bin/switch-to-configuration test
-```
-
-### 5. Maintenance
-```bash
-# Update all flake inputs
-nix flake update
-
-# Clean up older generations keeping the last 5
-nh clean all --keep 5
 ```
