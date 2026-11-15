@@ -108,7 +108,10 @@
   modules.nixos = {
     service = {
       keyd.enable = true;
-      noctalia-greeter.enable = true;
+      qylock = {
+        enable = true;
+        theme = "pixel-night-city";
+      };
     };
     program = {
       fcitx5 = {
