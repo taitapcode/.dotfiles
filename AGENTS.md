@@ -62,7 +62,7 @@ The repository defines two NixOS host configurations (`nixosConfigurations`), bo
   - Power / battery: `services.asusd` (charge limit **70%**, Quiet on battery / Performance on AC, `disable_nvidia_powerd_on_battery = true`). `powerManagement.powertop.enable = false` on purpose — do not re-enable.
 - **Filesystems**: NTFS `/mnt/Storage` via `ntfs3` (`nofail`), mounted by UUID.
 - **Network**: NetworkManager + Cloudflare WARP (`services.cloudflare-warp.enable = true`).
-- **Desktop**: Niri compositor + Noctalia shell bar, **Noctalia Greeter (`greetd`) as display manager**, Catppuccin Mocha (accent `blue`), Banana cursor (`size = 28`), Colloid-Dark icons, SDDM module exists but is *not* enabled on this host.
+- **Desktop**: Niri compositor + Noctalia shell bar, **SDDM (Wayland greeter) with the qylock `enfield` theme as display manager**, Catppuccin Mocha (accent `blue`), Banana cursor (`size = 28`), Colloid-Dark icons. The Noctalia Greeter (`greetd`) module still exists but is *not* enabled on this host.
 - **Input**: `keyd` swaps `Caps Lock` ⇄ `Esc` at hardware level; `fcitx5` + `fcitx5-lotus` (Vietnamese, Wayland) with `waydroid` for Android apps.
 - **Display profile**: `kanshi` pins the internal panel to `1920x1080@144Hz`.
 - **All new modules, packages and changes MUST target and be verified against `asus-tuf`.**
@@ -91,6 +91,7 @@ The repository defines two NixOS host configurations (`nixosConfigurations`), bo
 | `nix-index-database` | `github:nix-community/nix-index-database` | follows `nixpkgs` |
 | `hermes-agent` | `github:NousResearch/hermes-agent` | follows `nixpkgs` **and** `home-manager`; ships the upstream Home Manager module consumed by `programs/hermes.nix` |
 | `sops-nix` | `github:Mic92/sops-nix` | follows `nixpkgs`; supplies `homeManagerModules.sops` + `nixosModules.sops` (see section 5) |
+| `qylock` | `github:Darkkal44/qylock` | follows `nixpkgs`; supplies `nixosModules.default` (`programs.qylock`) + `packages.qylock-sddm-themes`, consumed by `service/qylock.nix` |
 
 - **Consistency Rule (hard)**: every new input MUST declare `inputs.nixpkgs.follows = "nixpkgs"` (and `home-manager.follows = "home-manager"` if it consumes Home Manager) to avoid duplicate package closures in the Nix store.
 - **Noctalia** is *not* a flake input: it comes from `pkgs.noctalia`, configured through the upstream NixOS/Home-Manager `noctalia` modules.
@@ -140,13 +141,13 @@ Both lists are appended to every `nixosConfigurations.<host>.modules`, and `home
 │   └── acer-aspire/         # configuration.nix + hardware.nix + home.nix  (LEGACY)
 ├── modules/
 │   ├── home-manager/
-│   │   ├── app/             # anki, ghostty, helium, mpv, obs, vesktop, zathura, zen-browser
+│   │   ├── app/             # anki, artcraft, ghostty, helium, mpv, obs, vesktop, zathura, zen-browser
 │   │   ├── desktop/         # niri.nix
 │   │   │   └── shell/       # noctalia.nix
 │   │   └── programs/        # bat, eza, fcitx5, fish, fzf, git, hermes, kanshi, nh, nix-index, nvim, opencode, tmux, yazi, zoxide
 │   └── nixos/
 │       ├── program/         # fcitx5, localsend, steam, waydroid
-│       └── service/         # keyd, noctalia-greeter, sddm
+│       └── service/         # keyd, noctalia-greeter, qylock, sddm
 ├── scripts/                 # default.nix + appimg.sh, battery.sh, note.sh, rcc.sh, touchpad.sh
 └── secrets/                 # secrets.yaml — sops/age-encrypted (see section 5)
 ```
@@ -263,6 +264,16 @@ imports = [ inputs.hermes-agent.homeManagerModules.default ];
 - Enabling it writes `~/.hermes/.managed`, after which the CLI **refuses** `hermes config set|edit` and `hermes setup`, pointing at `home-manager switch`. **Change Hermes configuration in `hermes.nix`, never with the CLI.**
 - DeepSeek is text-only, so `auxiliary.vision` routes image/OCR work to Gemini. Every config key lives in `settings` — keep them there, do not edit `~/.hermes/config.yaml` by hand.
 
+### Greeter: qylock SDDM theme (`service/qylock.nix`)
+
+`modules/nixos/service/qylock.nix` imports `inputs.qylock.nixosModules.default` and sets `programs.qylock` (themes from the store + `services.displayManager.sddm.theme`), so `services.displayManager.sddm` must be on — it chains `modules.nixos.service.sddm.enable` itself. `quickshell.enable = false` skips the Quickshell lockscreen wrapper (only the greeter is wanted).
+
+- SDDM finds a theme **by name** through `ThemeDir = /run/current-system/sw/share/sddm/themes`, which is why the upstream module also adds the theme package to `environment.systemPackages` — do not remove that.
+- The QML modules the themes import (`Qt5Compat.GraphicalEffects`, `QtMultimedia`, `QtSvg`) arrive via `services.displayManager.sddm.extraPackages`; `enfield` plays `bg.mp4` with the FFmpeg backend already inside `qt6.qtmultimedia`.
+- `catppuccin.sddm.enable = false` is mandatory: `catppuccin.autoEnable = true` otherwise installs its own theme and **collides** on `services.displayManager.sddm.theme`.
+- `services.displayManager.defaultSession = "niri"` picks the only Wayland session; the greeter runs on `wayland.compositor = "weston"` (nixpkgs default) — switch to `"kwin"` only if the greeter renders black.
+- **Cursor**: `[Theme] CursorTheme` alone is not enough on Wayland. SDDM hands the greeter only a whitelist of variables (`LANG*`, `LD_LIBRARY_PATH`, `QML2_IMPORT_PATH`, `QT_PLUGIN_PATH`, `XDG_DATA_DIRS`) and `libwayland-cursor` ignores `XDG_DATA_DIRS`, so the greeter finds no theme and draws **no pointer at all**. `General.GreeterEnvironment = "XCURSOR_PATH=<theme pkg>/share/icons:/run/current-system/sw/share/icons"` is what makes it resolvable — keep it, and keep `banana-cursor` in `environment.systemPackages`. Note `GreeterEnvironment` is also where nixpkgs sets `QT_WAYLAND_SHELL_INTEGRATION=layer-shell` for `compositor = "kwin"`, so merge rather than overwrite if you ever switch.
+
 ### Sops secrets (`secrets/`, `modules.home.programs.sops`)
 
 `sops-nix` is wired from both sides: `inputs.sops-nix.nixosModules.sops` in `hosts/common/core.nix` and `inputs.sops-nix.homeManagerModules.sops` in `hosts/common/home.nix`. `modules/home-manager/programs/sops.nix` sets `defaultSopsFile = self + "/secrets/secrets.yaml"` (age-encrypted, key at `~/.config/sops/age/keys.txt`) and exports `SOPS_AGE_KEY_FILE`.
@@ -273,6 +284,7 @@ Consumers declare `sops.secrets."<name>"` guarded by `config.modules.home.progra
 
 - `modules.home.programs.fish.enable` ⇒ also enables `fzf`, `zoxide`, `yazi`, `nix-index`.
 - `modules.home.desktop.niri.enable` ⇒ also enables `modules.home.desktop.shell.noctalia` and sets the Wayland session variables.
+- `modules.nixos.service.qylock.enable` ⇒ also enables `modules.nixos.service.sddm` (SDDM is the display manager the qylock theme is applied to).
 
 ### Niri runtime state via `include` (`config/niri/config.kdl`)
 

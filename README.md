@@ -23,7 +23,7 @@
 
 This repository contains my personal NixOS configuration. Built on **Nix Flakes** and **Home Manager**, it provides a cohesive, reproducible computing environment across system packages, kernel modules, hardware daemons, and granular userland configurations.
 
-The desktop is centered around **[Niri](https://github.com/YaLTeR/niri)** — an infinitely scrollable-tiling Wayland compositor — unified by the **[Noctalia](https://github.com/noctalia-dev/noctalia)** desktop shell & greeter, and styled throughout with the **Catppuccin Mocha** palette.
+The desktop is centered around **[Niri](https://github.com/YaLTeR/niri)** — an infinitely scrollable-tiling Wayland compositor — unified by the **[Noctalia](https://github.com/noctalia-dev/noctalia)** desktop shell, greeted at login by **[qylock](https://github.com/Darkkal44/qylock)**'s `enfield` SDDM theme, and styled throughout with the **Catppuccin Mocha** palette.
 
 ---
 
@@ -59,7 +59,7 @@ The desktop is centered around **[Niri](https://github.com/YaLTeR/niri)** — an
 ### Desktop & UI
 - **Compositor**: [Niri](https://github.com/YaLTeR/niri) (Scrollable-tiling Wayland compositor)
 - **Shell & Panel**: [Noctalia Shell](https://github.com/noctalia-dev/noctalia) (top bar, dock, control center, dynamic lockscreen widgets, wallpaper switcher)
-- **Display Manager**: [Noctalia Greeter](https://github.com/noctalia-dev/noctalia) (`greetd`)
+- **Display Manager**: [SDDM](https://github.com/sddm/sddm) (Wayland greeter, `weston`) with the [qylock](https://github.com/Darkkal44/qylock) `enfield` theme — animated video background, Orbitron font
 - **Theme**: Catppuccin Mocha (Accent: Blue)
 - **Cursor**: Banana Cursor (`banana-cursor`)
 - **Icons**: Colloid Dark (`colloid-icon-theme`)
@@ -72,7 +72,7 @@ The desktop is centered around **[Niri](https://github.com/YaLTeR/niri)** — an
 ### Applications & Productivity
 - **Development**: Modular Neovim, Opencode, Hermes Agent CLI (declaratively managed)
 - **Web Browsers**: [Zen Browser](https://zen-browser.app/) (Beta), [Helium Browser](https://github.com/oxcl/nix-flake-helium-browser)
-- **Documents & Media**: Zathura (PDF/EPUB), Loupe (Images), MPV (Audio/Video), LibreOffice
+- **Documents & Media**: Zathura (PDF/EPUB), Loupe (Images), MPV (Audio/Video), ArtCraft suite (WordCraft, GridCraft, DeckCraft, PhotoCraft, PdfCraft)
 - **Communication & Social**: Vesktop (Discord with Vencord plugins), LocalSend
 - **Other Services**: Cloudflare WARP (`cloudflare-warp`), Waydroid, Anki, OBS Studio, qBittorrent
 
@@ -188,7 +188,7 @@ appimg remove deckcraft           # Delete binary, entry, icons, extraction cach
 │   │   └── programs/        # CLI & user tools (Fish, Neovim, Bat, Eza, Git, Nh, Hermes, Sops)
 │   └── nixos/               # System-level modules (auto-discovered)
 │       ├── program/         # System programs (Steam, Fcitx5, Waydroid, LocalSend)
-│       └── service/         # System services (Keyd, Noctalia Greeter, SDDM)
+│       └── service/         # System services (Keyd, qylock greeter, SDDM, Noctalia Greeter)
 ├── scripts/                 # Custom shell scripts wrapped as flake packages
 └── secrets/                 # sops/age-encrypted secrets.yaml
 ```
