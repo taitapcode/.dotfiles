@@ -7,13 +7,26 @@
 }:
 let
   cfg = config.modules.home.programs.hermes;
-  # Hermes's browser: stock Chromium from nixpkgs, referenced by store path.
-  # Hermes never consults PATH (resolution: AGENT_BROWSER_EXECUTABLE_PATH >
-  # PM's runtime download, which is FHS-unsafe on NixOS), so the explicit path
-  # is what keeps the browser tool working. Chromium stays out of
-  # home.packages on purpose — the interpolated path already pins it in the
-  # closure, and putting it on PATH would shadow the user's default browser.
-  browserBin = "${pkgs.chromium}/bin/chromium";
+
+  # NousResearch/hermes-agent#154275: pm-packages.nix unconditionally appends
+  # the NixOS/patchelf#672 backport, which only applies to patchelf
+  # 0.19.0–0.19.2. nixpkgs is back on 0.15.2 (NixOS/nixpkgs#577387), so its
+  # patchPhase fails. Hand pm-packages a patchelf whose overrideAttrs is a
+  # no-op; that version predates the bug, so the stock build is correct.
+  # Mirrors NousResearch/hermes-agent#152542 — drop once it lands upstream.
+  patchelfForHermes =
+    if
+      lib.versionAtLeast pkgs.patchelf.version "0.19" && lib.versionOlder pkgs.patchelf.version "0.19.3"
+    then
+      pkgs.patchelf
+    else
+      pkgs.patchelf // { overrideAttrs = _: pkgs.patchelf; };
+
+  hermesPackage = inputs.hermes-agent.packages.${pkgs.stdenv.hostPlatform.system}.default.override {
+    pmPackages = pkgs.callPackage (inputs.hermes-agent + "/nix/pm-packages.nix") {
+      patchelf = patchelfForHermes;
+    };
+  };
 in
 {
   imports = [ inputs.hermes-agent.homeManagerModules.default ];
@@ -29,11 +42,7 @@ in
   config = lib.mkIf cfg.enable {
     programs.hermes-agent.enable = true;
 
-    # Hermes drives stock pkgs.chromium (see browserBin above), not a second
-    # browser build. Both declarations below must carry the same path — shells
-    # read home.sessionVariables, the gateway unit reads services…environment,
-    # and neither inherits the other.
-    home.sessionVariables.AGENT_BROWSER_EXECUTABLE_PATH = browserBin;
+    services.hermes-agent.package = hermesPackage;
 
     # hermes-desktop on PATH + XDG launcher entry. The launcher carries
     # HERMES_HOME, so the app shares ~/.hermes with the CLI and the services.
@@ -50,18 +59,15 @@ in
     # Change configuration here from now on, not with the CLI.
     services.hermes-agent = {
       enable = true;
-
-      # The gateway unit does not inherit shell session env; pin the same path.
-      environment.AGENT_BROWSER_EXECUTABLE_PATH = browserBin;
-
       settings = {
+        browser.executable_path = "${pkgs.chromium}/bin/chromium";
+
         model = {
           default = "deepseek-ai/DeepSeek-V4.1-Flash-1017";
           provider = "deepinfra";
         };
 
-        # Runtime default is "high"; pin the cheaper tier here.
-        agent.reasoning_effort = "low";
+        agent.reasoning_effort = "high";
 
         # Allowlist of toolsets that load for the CLI. Keep sorted.
         platform_toolsets.cli = [
@@ -146,15 +152,6 @@ in
     sops = lib.mkIf config.modules.home.programs.sops.enable {
       secrets."hermes-env" = {
         path = "${config.home.homeDirectory}/.hermes/.env";
-      };
-      secrets."google-client-secret" = {
-        path = "${config.home.homeDirectory}/.hermes/google_client_secret.json";
-      };
-      # google_api.py rewrites this file on every access-token refresh, so it
-      # must not be the default read-only 0400.
-      secrets."google-token" = {
-        path = "${config.home.homeDirectory}/.hermes/google_token.json";
-        mode = "0600";
       };
     };
   };
