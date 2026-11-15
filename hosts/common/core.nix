@@ -1,10 +1,22 @@
 {
+  config,
   pkgs,
   inputs,
   self,
   ...
 }:
-
+let
+  # NixOS only registers fonts with fontconfig (store paths in /etc/fonts); it builds no
+  # /usr/share/fonts tree. Apps that scan the Debian/Fedora layout instead of asking
+  # fontconfig — the ArtCraft suite, Electron apps, AppImages — therefore see almost no
+  # font. Flatten every system font package into one tree for the link below.
+  systemFonts = pkgs.buildEnv {
+    name = "system-fonts";
+    paths = config.fonts.packages;
+    pathsToLink = [ "/share/fonts" ];
+    ignoreCollisions = true;
+  };
+in
 {
   imports = [
     inputs.catppuccin.nixosModules.catppuccin
@@ -58,6 +70,12 @@
       };
     };
   };
+
+  # Expose the fonts above where apps that hardcode the distribution layout look for them.
+  systemd.tmpfiles.rules = [
+    "d /usr/share 0755 root root -"
+    "L+ /usr/share/fonts - - - - ${systemFonts}/share/fonts"
+  ];
 
   # Define base user settings
   users.users.tai = {
