@@ -91,9 +91,6 @@ in
             "org.pwmt.zathura"
             "anki"
             "helium"
-            "writer"
-            "impress"
-            "calc"
             "LocalSend"
             "com.obsproject.Studio"
           ];

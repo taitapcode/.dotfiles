@@ -69,13 +69,6 @@
 
   xdg.mimeApps.enable = true;
   xdg.mimeApps.defaultApplications = {
-    "application/msword" = "libreoffice-writer.desktop";
-    "application/vnd.openxmlformats-officedocument.wordprocessingml.document" =
-      "libreoffice-writer.desktop";
-    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" = "libreoffice-calc.desktop";
-    "application/vnd.openxmlformats-officedocument.presentationml.presentation" =
-      "libreoffice-impress.desktop";
-
     "image/png" = "org.gnome.Loupe.desktop";
     "image/jpeg" = "org.gnome.Loupe.desktop";
     "image/webp" = "org.gnome.Loupe.desktop";
@@ -118,7 +111,6 @@
     app = {
       vesktop.enable = true;
       mpv.enable = true;
-      libreoffice.enable = true;
     };
   };
 }

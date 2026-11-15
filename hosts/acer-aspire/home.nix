@@ -10,6 +10,13 @@
     "x-scheme-handler/https" = "zen-beta.desktop";
     "text/html" = "zen-beta.desktop";
 
+    "application/msword" = "libreoffice-writer.desktop";
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document" =
+      "libreoffice-writer.desktop";
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" = "libreoffice-calc.desktop";
+    "application/vnd.openxmlformats-officedocument.presentationml.presentation" =
+      "libreoffice-impress.desktop";
+
     "application/pdf" = "org.pwmt.zathura.desktop";
     "application/epub+zip" = "org.pwmt.zathura.desktop";
   };
@@ -26,6 +33,7 @@
       ghostty.enable = true;
       anki.enable = true;
       zathura.enable = true;
+      libreoffice.enable = true;
     };
     desktop.niri.enable = true;
   };
