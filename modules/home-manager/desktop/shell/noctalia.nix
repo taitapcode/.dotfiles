@@ -76,23 +76,31 @@ in
 
         dock = {
           auto_hide = true;
+          auto_hide_reveal_delay_ms = 175;
           background_opacity = 0.85;
           cross_axis_padding = 0;
           enabled = true;
           icon_size = 70;
           inactive_opacity = 0.95;
           item_spacing = 0;
+          magnification_scale = 1.5;
           main_axis_padding = 0;
           pinned = [
             "com.mitchellh.ghostty"
             "zen-beta"
+            "com.nousresearch.hermes"
             "org.gnome.Nautilus"
             "vesktop"
             "org.pwmt.zathura"
             "anki"
+            "antigravity"
             "helium"
             "LocalSend"
             "com.obsproject.Studio"
+            "ai.storyteller.wordcraft"
+            "ai.storyteller.deckcraft"
+            "ai.storyteller.gridcraft"
+            "ai.storyteller.photocraft"
           ];
           position = "bottom";
           reserve_space = false;
@@ -121,6 +129,7 @@ in
             "lockscreen-login-box@eDP-1"
             "lockscreen-widget-0000000000000002"
             "lockscreen-widget-0000000000000004"
+            "lockscreen-login-box@DP-9"
           ];
 
           grid = {
@@ -130,6 +139,35 @@ in
           };
 
           widget = {
+
+            "lockscreen-login-box@DP-9" = {
+              box_height = 196.0;
+              box_width = 810.0;
+              cx = 1280.0;
+              cy = 1258.0;
+              output = "DP-9";
+              placement_height = 1440.0;
+              placement_width = 2560.0;
+              rotation = 0.0;
+              type = "login_box";
+              settings = {
+                background_color = "surface_container";
+                background_opacity = 0.88;
+                background_radius = 12.0;
+                center_password_text = false;
+                input_opacity = 1.0;
+                input_radius = 6.0;
+                layout = "regular";
+                show_caps_lock = true;
+                show_keyboard_layout = true;
+                show_login_button = true;
+                show_media = true;
+                show_password_reveal = true;
+                show_session_buttons = true;
+                show_unlock_hint = true;
+                show_weather = true;
+              };
+            };
 
             "lockscreen-login-box@eDP-1" = {
               box_height = 128.0;
@@ -142,7 +180,7 @@ in
               rotation = 0.0;
               type = "login_box";
               settings = {
-                background_color = "surface_variant";
+                background_color = "surface_container";
                 background_opacity = 0.88;
                 background_radius = 12.0;
                 center_password_text = true;
@@ -153,6 +191,7 @@ in
                 show_keyboard_layout = true;
                 show_login_button = true;
                 show_media = false;
+                show_password_reveal = true;
                 show_session_buttons = true;
                 show_unlock_hint = false;
                 show_weather = false;
@@ -248,7 +287,10 @@ in
           position = "top_center";
         };
 
-        osd.kinds.keyboard_layout = false;
+        osd.kinds = {
+          keyboard_layout = false;
+          media = false;
+        };
 
         plugins.enabled = [ ];
 
