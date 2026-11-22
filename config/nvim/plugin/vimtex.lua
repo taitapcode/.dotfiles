@@ -25,8 +25,8 @@ vim.g.vimtex_quickfix_open_on_warning = 0
 -- parser on every FileType). VimTeX keeps compile/view/text-object duties
 -- only; its own syntax+syntax-callback layer is off. vimtex_syntax_enabled=0
 -- also stops VimTeX from printing its syntax-file warnings.
-vim.g.vimtex_syntax_enabled = 0
-vim.g.vimtex_syntax_conceal_disable = 1
+-- vim.g.vimtex_syntax_enabled = 1
+-- vim.g.vimtex_syntax_conceal_disable = 0
 
 -- Root markers so a Sections/*.tex buffer resolves to its main.tex
 vim.g.vimtex_root_markers = { '.latexmkrc', '.vimtexroot', 'main.tex', 'texmf.cnf' }
