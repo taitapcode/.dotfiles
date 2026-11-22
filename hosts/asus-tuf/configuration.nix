@@ -110,7 +110,7 @@
       keyd.enable = true;
       qylock = {
         enable = true;
-        theme = "pixel-night-city";
+        theme = "sword";
       };
     };
     program = {
