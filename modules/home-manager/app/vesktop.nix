@@ -8,7 +8,7 @@ in
   config = lib.mkIf cfg.enable {
     programs.vesktop = {
       enable = true;
-
+      mutableSettings = true;
       settings = {
         discordBranch = "stable";
         tray = true;
@@ -19,8 +19,8 @@ in
 
       vencord = {
         useSystem = true;
+        mutableSettings = true;
         settings = {
-
           cloud = {
             authenticated = true;
             url = "https://api.vencord.dev/";
