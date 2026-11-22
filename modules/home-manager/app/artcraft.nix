@@ -54,8 +54,6 @@ in
 
       (lib.mkIf cfg.pinUpdates {
         xdg.dataFile."ArtCraft/versions/versions.json" = {
-          # The ArtCraft Launcher writes a regular file here; take it over instead of
-          # failing the switch ("existing file is in the way").
           force = true;
           text = builtins.toJSON {
             apps = builtins.listToAttrs (
