@@ -26,7 +26,10 @@ in
       type = "fcitx5";
       fcitx5 = {
         waylandFrontend = true;
-        addons = [ pkgs.fcitx5-lotus ];
+        addons = with pkgs; [
+          fcitx5-lotus
+          fcitx5-mozc
+        ];
       };
     };
 

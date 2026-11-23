@@ -5,9 +5,25 @@ DefaultIM=lotus
 
 [Groups/0/Items/0]
 Name=keyboard-us
+Layout=
 
 [Groups/0/Items/1]
 Name=lotus
+Layout=
+
+[Groups/1]
+Name=Japanese
+Default Layout=us
+DefaultIM=mozc
+
+[Groups/1/Items/0]
+Name=keyboard-us
+Layout=
+
+[Groups/1/Items/1]
+Name=mozc
+Layout=
 
 [GroupOrder]
 0=Default
+1=Japanese

@@ -18,6 +18,7 @@ ModifierOnlyKeyTimeout=250
 [Hotkey/AltTriggerKeys]
 
 [Hotkey/EnumerateGroupForwardKeys]
+0=Super+Alt+space
 
 [Hotkey/EnumerateGroupBackwardKeys]
 

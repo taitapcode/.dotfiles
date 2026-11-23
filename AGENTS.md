@@ -173,6 +173,7 @@ Check the existing module before wiring a new config. The repo uses three patter
 2. **Inline via `builtins.readFile`** — Neovim Lua (`helper/*.lua`, `config/*.lua`, `plugin/*.lua`) is read into Nix strings and injected into Neovim options/plugin specs. Bespoke tooling files (`external/stylua.toml`, `external/clang-format`, `external/asm-lsp.toml`, `snippets/*.json`) are symlinked individually via `xdg.configFile`.
 3. **Individual file symlink** — e.g. Fcitx5 links each conf file to `xdg.configFile."fcitx5/..."` rather than the whole directory.
    Caveat: fcitx5 saves a config via temp-file + `rename()`, so a runtime save (settings GUI Apply, tray toggle) *replaces the store symlink with a regular file*. The declared value re-asserts itself on the next switch; only files left unmanaged beside it (e.g. `fcitx5/conf/lotus-app-rules.conf`) keep runtime changes permanently.
+   Input methods are split into **two groups** on purpose: `Default` (`keyboard-us` + `lotus`) and `Japanese` (`keyboard-us` + `mozc`). Fcitx5 has no per-input-method hotkey, so `Ctrl+Space` (`TriggerKeys`/`EnumerateForwardKeys`) only cycles inside the current group while `Super+Alt+Space` (`EnumerateGroupForwardKeys`) hops between them — do not collapse this back into one group.
 
 Never convert one pattern into another opportunistically; each exists because the app behaves differently (e.g. Neovim needs `readFile` so Lua can be interpolated).
 
