@@ -65,6 +65,7 @@
       };
       sops.enable = true;
       opencode.enable = true;
+      look.enable = true;
     };
     app = {
       zen-browser.enable = true;

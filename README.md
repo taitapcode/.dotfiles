@@ -59,6 +59,7 @@ The desktop is centered around **[Niri](https://github.com/YaLTeR/niri)** — an
 ### Desktop & UI
 - **Compositor**: [Niri](https://github.com/YaLTeR/niri) (Scrollable-tiling Wayland compositor)
 - **Shell & Panel**: [Noctalia Shell](https://github.com/noctalia-dev/noctalia) (top bar, dock, control center, dynamic lockscreen widgets, wallpaper switcher)
+- **Launcher**: [Look](https://github.com/kunkka19xx/look) — keyboard-first launcher on `Mod + D`, Catppuccin theme, config merged from Nix into `~/.look/config`; indexes `~/.dotfiles` and `~/Projects` (depth 8), translation panel on `t"` (VI/EN/JA)
 - **Display Manager**: [SDDM](https://github.com/sddm/sddm) (Wayland greeter, `weston`) with the [qylock](https://github.com/Darkkal44/qylock) `enfield` theme — animated video background, Orbitron font
 - **Theme**: Catppuccin Mocha (Accent: Blue)
 - **Cursor**: Banana Cursor (`banana-cursor`)
@@ -83,7 +84,6 @@ The desktop is centered around **[Niri](https://github.com/YaLTeR/niri)** — an
 ### System & Noctalia Menus
 | Shortcut | Action |
 | :--- | :--- |
-| `Mod + D` | Open Noctalia Application Launcher |
 | `Mod + S` | Toggle Noctalia Control Center |
 | `Mod + P` | Open Session Menu (Power, Reboot, Logout) |
 | `Mod + V` | Open Clipboard History |
@@ -97,6 +97,7 @@ The desktop is centered around **[Niri](https://github.com/YaLTeR/niri)** — an
 | Shortcut | Action |
 | :--- | :--- |
 | `Mod + Return` | Spawn Ghostty Terminal |
+| `Mod + D` | Open the Look Launcher |
 | `Mod + B` | Launch Zen Browser |
 | `Mod + E` | Open Nautilus File Explorer |
 
@@ -185,7 +186,7 @@ appimg remove deckcraft           # Delete binary, entry, icons, extraction cach
 │   ├── home-manager/        # User-level modules (auto-discovered)
 │   │   ├── app/             # Desktop applications (Ghostty, Zen, etc.)
 │   │   ├── desktop/         # Niri and Noctalia Shell / Greeter configuration
-│   │   └── programs/        # CLI & user tools (Fish, Neovim, Bat, Eza, Git, Nh, Hermes, Sops)
+│   │   └── programs/        # CLI & user tools (Fish, Neovim, Bat, Eza, Git, Nh, Hermes, Sops, Look)
 │   └── nixos/               # System-level modules (auto-discovered)
 │       ├── program/         # System programs (Steam, Fcitx5, Waydroid, LocalSend)
 │       └── service/         # System services (Keyd, qylock greeter, SDDM, Noctalia Greeter)

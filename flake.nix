@@ -54,6 +54,11 @@
       url = "github:Darkkal44/qylock";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    look = {
+      url = "github:kunkka19xx/look";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =

@@ -92,6 +92,7 @@ The repository defines two NixOS host configurations (`nixosConfigurations`), bo
 | `hermes-agent` | `github:NousResearch/hermes-agent` | follows `nixpkgs` **and** `home-manager`; ships the upstream Home Manager module consumed by `programs/hermes.nix` |
 | `sops-nix` | `github:Mic92/sops-nix` | follows `nixpkgs`; supplies `homeManagerModules.sops` + `nixosModules.sops` (see section 5) |
 | `qylock` | `github:Darkkal44/qylock` | follows `nixpkgs`; supplies `nixosModules.default` (`programs.qylock`) + `packages.qylock-sddm-themes`, consumed by `service/qylock.nix` |
+| `look` | `github:kunkka19xx/look` | follows `nixpkgs`; supplies `homeModules.default` (`programs.lookapp`, binary + config merge), consumed by `programs/look.nix`; its Cachix substituter is wired in `hosts/common/core.nix` |
 
 - **Consistency Rule (hard)**: every new input MUST declare `inputs.nixpkgs.follows = "nixpkgs"` (and `home-manager.follows = "home-manager"` if it consumes Home Manager) to avoid duplicate package closures in the Nix store.
 - **Noctalia** is *not* a flake input: it comes from `pkgs.noctalia`, configured through the upstream NixOS/Home-Manager `noctalia` modules.
@@ -144,7 +145,7 @@ Both lists are appended to every `nixosConfigurations.<host>.modules`, and `home
 │   │   ├── app/             # anki, artcraft, ghostty, helium, mpv, obs, vesktop, zathura, zen-browser
 │   │   ├── desktop/         # niri.nix
 │   │   │   └── shell/       # noctalia.nix
-│   │   └── programs/        # bat, eza, fcitx5, fish, fzf, git, hermes, kanshi, nh, nix-index, nvim, opencode, tmux, yazi, zoxide
+│   │   └── programs/        # bat, eza, fcitx5, fish, fzf, git, hermes, kanshi, look, nh, nix-index, nvim, opencode, tmux, yazi, zoxide
 │   └── nixos/
 │       ├── program/         # fcitx5, localsend, steam, waydroid
 │       └── service/         # keyd, noctalia-greeter, qylock, sddm
@@ -274,6 +275,17 @@ imports = [ inputs.hermes-agent.homeManagerModules.default ];
 - `catppuccin.sddm.enable = false` is mandatory: `catppuccin.autoEnable = true` otherwise installs its own theme and **collides** on `services.displayManager.sddm.theme`.
 - `services.displayManager.defaultSession = "niri"` picks the only Wayland session; the greeter runs on `wayland.compositor = "weston"` (nixpkgs default) — switch to `"kwin"` only if the greeter renders black.
 - **Cursor**: `[Theme] CursorTheme` alone is not enough on Wayland. SDDM hands the greeter only a whitelist of variables (`LANG*`, `LD_LIBRARY_PATH`, `QML2_IMPORT_PATH`, `QT_PLUGIN_PATH`, `XDG_DATA_DIRS`) and `libwayland-cursor` ignores `XDG_DATA_DIRS`, so the greeter finds no theme and draws **no pointer at all**. `General.GreeterEnvironment = "XCURSOR_PATH=<theme pkg>/share/icons:/run/current-system/sw/share/icons"` is what makes it resolvable — keep it, and keep `banana-cursor` in `environment.systemPackages`. Note `GreeterEnvironment` is also where nixpkgs sets `QT_WAYLAND_SHELL_INTEGRATION=layer-shell` for `compositor = "kwin"`, so merge rather than overwrite if you ever switch.
+
+### Launcher: Look (`programs/look.nix` + `hosts/common/core.nix`)
+
+`modules/home-manager/programs/look.nix` imports `inputs.look.homeModules.default` and sets `programs.lookapp` — that single module both installs `lookapp` (upstream default package, i.e. `inputs.look.packages.<system>.default`) and merges declared keys into `~/.look/config`.
+
+- The upstream Home Manager module **merges** declared keys into `~/.look/config` rather than symlinking it, because Look rewrites that file itself from its settings panel; declared keys win, everything else in the file is preserved.
+- **The prebuilt binary is only on the project's own cache** (`lookapp` is absent from `cache.nixos.org`), so `hosts/common/core.nix` adds `extra-substituters = [ "https://look.cachix.org" ]` + `extra-trusted-public-keys` next to `experimental-features`. Both keys are additive — the default substituters and keys survive. Drop them and `lookapp` compiles from source (Rust + gpui).
+- **niri has no API to register an app's global hotkey at runtime**, so Look's own hotkey is off (`settings.launcher_hotkey = "none"`) and the toggle is a hand-written bind in `config/niri/config.kdl`: `Mod+D allow-inhibiting=false { spawn "lookapp" "--toggle"; }`. `launcher_hotkey` is not an alternative to that bind — on niri Look only reports a "bind a key manually" notice (`wayland_shortcut.rs` matches `Compositor::Niri` to `report_niri_keybinding()` and registers nothing). `lookapp --toggle` reaches the running instance over D-Bus (`com.look.Desktop`) or, failing that, its control socket — no `gdbus` wrapper is needed (`gdbus` is not installed on this host; `dbus-send`/`busctl` are).
+- `allow-inhibiting=false` matters: without it niri hands `Mod+D` to a window holding a keyboard-shortcuts inhibitor (fullscreen games, browsers, VMs) and Look never opens over them.
+- Autostart is `spawn-at-startup "lookapp"` in the same file — `.desktop` autostart only works on full DEs (GNOME/KDE), not on niri.
+- `settings` also widens indexing: `file_scan_extra_roots = [ "~/.dotfiles" "~/Projects" ]` on top of the Linux defaults (`~/Desktop`, `~/Documents`, `~/Downloads`, `~/Pictures`, `~/Videos`) with `file_scan_depth = 8`. Extra roots may not nest inside a default root or in each other; hidden entries and `skip_dir_names` (`node_modules`, `.venv`, …) are never walked, so `.git` costs nothing and needs no `ignored_patterns_*`. Depth matters: the default 4 reaches only 251 of the 1583 files under `~/Projects` (the hermes-brain skills and HCMUT archives sit 5-8 deep) while 8 stays far under `file_scan_limit = 8000`. Translation needs no config — Look's own `t"` prefix uses the built-in `vi,en,ja` default.
 
 ### Sops secrets (`secrets/`, `modules.home.programs.sops`)
 

@@ -78,9 +78,6 @@ cursor {
   xcursor-size 24
 }
 
-
-
-
 hotkey-overlay {
   skip-at-startup
 }
@@ -137,6 +134,15 @@ layer-rule {
   place-within-backdrop true
 }
 
+window-rule {
+  match app-id="^lookapp$"
+  open-floating true
+  focus-ring { off; }
+  shadow { off; }
+}
+
+spawn-at-startup "lookapp"
+
 binds {
   Mod+Shift+Slash { show-hotkey-overlay; }
 
@@ -145,8 +151,11 @@ binds {
   Mod+Shift+B hotkey-overlay-title="Toggle battery limit" { spawn "battery" "toggle"; }
   Mod+E hotkey-overlay-title="Run a file explorer" { spawn "nautilus"; }
 
+  // Launcher via Look. allow-inhibiting=false keeps the key ours while a fullscreen
+  // game, browser or VM holds a keyboard-shortcuts inhibitor.
+  Mod+D allow-inhibiting=false { spawn "lookapp" "--toggle"; }
+
   // Open menus via Noctalia
-  Mod+D { spawn "noctalia" "msg" "panel-toggle" "launcher"; }
   Mod+S { spawn "noctalia" "msg" "panel-toggle" "control-center"; }
   Mod+P { spawn "noctalia" "msg" "panel-toggle" "session"; }
   Mod+V { spawn "noctalia" "msg" "panel-toggle" "clipboard"; }
