@@ -8,6 +8,18 @@
 let
   cfg = config.modules.home.programs.neovim;
   nvimConfig = "${self}/config/nvim/";
+
+  mipsGrammar = pkgs.tree-sitter.buildGrammar {
+    language = "mips";
+    version = "0.3.1";
+    src = pkgs.fetchFromGitHub {
+      owner = "omeyenburg";
+      repo = "tree-sitter-mips";
+      rev = "676f16a7662ccb4c494f131d26d9c1cc72bc2b52";
+      hash = "sha256-UmirelUtQJNu3B7BFZok/ip9MAKkwH/QX8ulvqiagjA=";
+    };
+  };
+  mipsPlugin = pkgs.neovimUtils.grammarToPlugin mipsGrammar;
 in
 {
   options.modules.home.programs.neovim.enable = lib.mkEnableOption "Enable Neovim configuration";
@@ -65,6 +77,7 @@ in
           blink-copilot
           nvim-lspconfig
           nvim-treesitter.withAllGrammars
+          mipsPlugin
           {
             plugin = vimtex;
             config = loadPluginConfig "vimtex";

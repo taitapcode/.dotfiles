@@ -146,6 +146,9 @@ vim.filetype.add({
   },
 })
 
+-- Use the MIPS tree-sitter grammar for assembly files.
+vim.treesitter.language.register('mips', 'asm')
+
 -- Enable Treesitter
 vim.api.nvim_create_autocmd('FileType', {
   callback = function()
