@@ -70,6 +70,7 @@
     app = {
       zen-browser.enable = true;
       ghostty.enable = true;
+      neovide.enable = true;
       anki.enable = true;
       zathura.enable = true;
       helium.enable = true;
